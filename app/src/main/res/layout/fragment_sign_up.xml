@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".SignUpFragment"
+    android:padding="20dp"
+    android:background="@color/white">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/dark_gray"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up_for_an_account_to_experience_better"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/dark_gray"
+        android:textStyle="italic"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/dark_gray">
+        <EditText
+            android:id="@+id/username"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="@string/user_name"
+            android:background="@color/white"
+            android:textColorHint="@color/dark_gray"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/dark_gray">
+        <EditText
+            android:id="@+id/email_signin"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="@string/email"
+            android:background="@color/white"
+            android:textColorHint="@color/dark_gray"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/dark_gray">
+        <EditText
+            android:id="@+id/password"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:background="@color/white"
+            android:textColorHint="@color/dark_gray"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/dark_gray">
+        <EditText
+            android:id="@+id/retype_password"
+            android:layout_gravity="center"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="@string/retype_password"
+            android:inputType="textPassword"
+            android:background="@color/white"
+            android:textColorHint="@color/dark_gray"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/btn_send_signup"
+        android:layout_width="300dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="@string/sign_in"
+        android:background="@drawable/button_rounded_corner_color_pink"
+        android:textColor="@color/white"
+        />
+
+</LinearLayout>

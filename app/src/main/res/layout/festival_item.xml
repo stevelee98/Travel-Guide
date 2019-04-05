@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:background="@color/white"
+    android:layout_margin="15dp">
+
+    <android.support.v7.widget.CardView
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:rowCount="3"
+            android:columnCount="2"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:id="@+id/fes_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_columnSpan="2"
+                android:src="@drawable/fes_denlong"
+                android:focusable="true" />
+            <TextView
+                android:id="@+id/fes_name"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:layout_gravity="right|bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="20sp"
+                android:text="@string/festival_name"
+                android:singleLine="false"
+                android:maxLines="2"
+                android:background="@color/white"
+                tools:ignore="RtlHardcoded" />
+
+            <TextView
+            android:id="@+id/month_fes"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:textSize="20sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:text="TH02"
+                android:textColor="#d70004"
+            />
+
+            <TextView
+                android:id="@+id/day_fes"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:textSize="28sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/dark_gray"
+                android:text="30"
+                />
+        </GridLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
