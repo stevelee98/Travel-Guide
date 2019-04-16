@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MapFragment"
+    android:layout_marginBottom="20dp"
+    android:orientation="vertical"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:elevation="10dp"
+            android:background="@drawable/white_border"
+            android:id="@+id/relLayout1">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/ic_magnify"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_search_black_24dp"/>
+
+            <EditText
+                android:id="@+id/input_search"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/ic_magnify"
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/dark"
+                android:background="@null"
+                android:hint="Enter Address, City or Zip Code"
+                android:textColorHint="@color/dark_gray"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:inputType="text"/>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/police_stations_or_emegency_assistance_around_you"
+        android:textAlignment="center"
+        android:padding="5dp"
+        android:textStyle="italic"
+        android:textColor="@color/dark_gray"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:background="@color/white"
+        android:id="@+id/rv_emergency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
