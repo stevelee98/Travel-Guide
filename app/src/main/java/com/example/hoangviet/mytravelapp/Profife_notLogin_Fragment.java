@@ -9,6 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -32,6 +38,9 @@ public class Profife_notLogin_Fragment extends Fragment {
     public View view;
     private Button btnProfile; //nếu chưa đăng nhập nút bấm sẽ hiển thị sign in, nếu đăng nhập rồi nút bấm sẽ hiển thị user name
     private OnFragmentInteractionListener mListener;
+    private Button btnLanguage;
+    private Button btnSignIn;
+    private Button btnSignOut;
 
     public Profife_notLogin_Fragment() {
         // Required empty public constructor
@@ -70,6 +79,8 @@ public class Profife_notLogin_Fragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_profife_not_login_, container, false);
         btnProfile = (Button) view.findViewById(R.id.btn_profile);
+        btnLanguage = view.findViewById(R.id.btn_language);
+        btnSignOut = view.findViewById(R.id.btn_sign_out);
 
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +91,47 @@ public class Profife_notLogin_Fragment extends Fragment {
                 transaction.commit();
             }
         });
+        btnLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.frame_container,new SelectLanguageDialog());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        btnSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
+
+        try {
+            getCurrentUser();
+        } catch (Exception err){
+
+        }
         return view;
+    }
+    public void signOut(){
+        boolean isSignOut = mListener.signOut();
+        if(isSignOut){
+            this.btnProfile.setText(R.string.sign_in);
+            this.btnSignOut.setVisibility(View.GONE);
+        } else {
+
+        }
+    }
+    public void getCurrentUser(){
+        FirebaseUser user = mListener.getCurrentUser();
+        String name = user.getDisplayName();
+        String email = user.getEmail();
+        Uri photoUrl = user.getPhotoUrl();
+        ImageView avatar = view.findViewById(R.id.img_avatar);
+        avatar.setImageURI(photoUrl);
+        this.btnProfile.setText(email);
+        this.btnSignOut.setVisibility(View.VISIBLE);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -99,6 +150,7 @@ public class Profife_notLogin_Fragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
@@ -120,5 +172,7 @@ public class Profife_notLogin_Fragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        FirebaseUser getCurrentUser();
+        boolean signOut();
     }
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "752948822276",
+    "firebase_url": "https://divivu-a3eca.firebaseio.com",
+    "project_id": "divivu-a3eca",
+    "storage_bucket": "divivu-a3eca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752948822276:android:31f7d927e2d6e6e7",
+        "android_client_info": {
+          "package_name": "com.example.hoangviet.mytravelapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752948822276-6jl0gagptr9vvb81d16iu4dijhlba0er.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_7EuxwWABArkX9yTmgrM85R0qf2GDYp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752948822276-6jl0gagptr9vvb81d16iu4dijhlba0er.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
