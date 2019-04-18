@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
 
@@ -15,7 +16,7 @@
             android:orientation="vertical"
             android:background="@color/white">
             <TextView
-                android:id="@+id/txt_emergency_name"
+                android:id="@+id/txt_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:text="police"
@@ -32,14 +33,14 @@
                 android:background="@color/white">
 
                 <TextView
-                    android:id="@+id/em_num_start"
+                    android:id="@+id/item_num_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4.3"
                     android:textColor="@color/dark"
                     />
                 <RatingBar
-                    android:id="@+id/em_rating"
+                    android:id="@+id/item_rating"
                     android:layout_marginStart="10dp"
                     style="@style/customRatingBar"
                     android:layout_marginTop="3dp"
@@ -48,7 +49,7 @@
                     android:background="@color/white"
                     />
                 <TextView
-                    android:id="@+id/txt_distance_em"
+                    android:id="@+id/txt_distance_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"

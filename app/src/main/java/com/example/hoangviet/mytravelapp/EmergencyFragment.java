@@ -34,8 +34,8 @@ public class EmergencyFragment extends Fragment {
 
     public View view;
     private RecyclerView recyclerView;
-    private EmergencyAdapter emergencyAdapter;
-    private List<EmergencyItem> itemList;
+    private CustomItemAdapter emergencyAdapter;
+    private List<ItemList> itemList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,7 +74,7 @@ public class EmergencyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_emergency, container, false);
+        //view = inflater.inflate(R.layout.fragment_emergency, container, false);
 
 //        recyclerView = (RecyclerView) view.findViewById(R.id.rv_emergency);
 //
@@ -88,46 +88,46 @@ public class EmergencyFragment extends Fragment {
     }
 
     private void prepareEm() {
-        EmergencyItem a = new EmergencyItem("police","4.2","4.2","1.3 Km");
+        ItemList a = new ItemList("police","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
         emergencyAdapter.notifyDataSetChanged();

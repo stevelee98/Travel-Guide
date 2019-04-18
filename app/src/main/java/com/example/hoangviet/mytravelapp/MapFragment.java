@@ -115,8 +115,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
 
     private RecyclerView recyclerView;
-    private EmergencyAdapter emergencyAdapter;
-    private List<EmergencyItem> itemList;
+    private CustomItemAdapter CustomItemAdapter;
+    private List<ItemList> itemList;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -225,13 +225,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mapView.onResume();
         mapView.getMapAsync(this);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_emergency);
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv_item);
 
         itemList = new ArrayList<>();
-        emergencyAdapter = new EmergencyAdapter(getActivity(),itemList);
+        CustomItemAdapter = new CustomItemAdapter(getActivity(),itemList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(emergencyAdapter);
+        recyclerView.setAdapter(CustomItemAdapter);
         prepareEm();
         init();
 
@@ -239,49 +239,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         return view;
     }
     private void prepareEm() {
-        EmergencyItem a = new EmergencyItem("police","4.2","4.2","1.3 Km");
+        ItemList a = new ItemList("police","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        a = new EmergencyItem("công an quận 7","4.2","4.2","1.3 Km");
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
         itemList.add(a);
 
-        emergencyAdapter.notifyDataSetChanged();
+        CustomItemAdapter.notifyDataSetChanged();
     }
 
 
@@ -408,7 +408,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlacesUrl.append("location=" + latitude + "," + longitude);
         googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&types=" + searchString );
+        googlePlacesUrl.append("&types=" + "police" );
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
 

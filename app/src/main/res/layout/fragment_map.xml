@@ -67,7 +67,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:background="@color/white"
-        android:id="@+id/rv_emergency"
+        android:id="@+id/rv_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
