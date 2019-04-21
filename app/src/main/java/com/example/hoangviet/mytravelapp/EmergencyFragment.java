@@ -4,20 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReservationFragment.OnFragmentInteractionListener} interface
+ * {@link EmergencyFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReservationFragment#newInstance} factory method to
+ * Use the {@link EmergencyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReservationFragment extends Fragment {
+public class EmergencyFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,9 +32,14 @@ public class ReservationFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    public View view;
+    private RecyclerView recyclerView;
+    private CustomItemAdapter emergencyAdapter;
+    private List<ItemList> itemList;
+
     private OnFragmentInteractionListener mListener;
 
-    public ReservationFragment() {
+    public EmergencyFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +49,11 @@ public class ReservationFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ReservationFragment.
+     * @return A new instance of fragment EmergencyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReservationFragment newInstance(String param1, String param2) {
-        ReservationFragment fragment = new ReservationFragment();
+    public static EmergencyFragment newInstance(String param1, String param2) {
+        EmergencyFragment fragment = new EmergencyFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,9 +74,64 @@ public class ReservationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservation, container, false);
+        //view = inflater.inflate(R.layout.fragment_emergency, container, false);
+
+//        recyclerView = (RecyclerView) view.findViewById(R.id.rv_emergency);
+//
+//        itemList = new ArrayList<>();
+//        emergencyAdapter = new EmergencyAdapter(getActivity(),itemList);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(emergencyAdapter);
+//        prepareEm();
+        return view;
     }
 
+    private void prepareEm() {
+        ItemList a = new ItemList("police","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+        itemList.add(a);
+
+        emergencyAdapter.notifyDataSetChanged();
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

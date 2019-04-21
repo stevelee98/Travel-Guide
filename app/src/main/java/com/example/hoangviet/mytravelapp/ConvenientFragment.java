@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,7 @@ import java.util.Objects;
  * Use the {@link ConvenientFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConvenientFragment extends Fragment {
+public class ConvenientFragment extends Fragment implements EmergencyFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,6 +35,7 @@ public class ConvenientFragment extends Fragment {
 
     public View view;
     private Toolbar toolbar;
+    private CardView cvEmergency;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,6 +78,21 @@ public class ConvenientFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_convenient);
         ((AppCompatActivity)Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity)(getActivity())).getSupportActionBar()).setTitle("Explore around you");
+
+        cvEmergency = (CardView) view.findViewById(R.id.cv_emergency);
+
+        cvEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container,new MapFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+//                transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                transaction.add(R.id.frame_container, new EmergencyFragment());
+//                transaction.commit();
+            }
+        });
         return view;
     }
 
@@ -100,6 +118,11 @@ public class ConvenientFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**

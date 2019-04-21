@@ -13,6 +13,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -25,22 +29,23 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
 
-
-public class MainActivity extends AppCompatActivity implements
-        HomeFragment.OnFragmentInteractionListener,
+public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
         ConvenientFragment.OnFragmentInteractionListener,
         Profife_notLogin_Fragment.OnFragmentInteractionListener,
         SigninFragment.OnFragmentInteractionListener ,
         SignUpFragment.OnFragmentInteractionListener,
-        SelectLanguageDialog.OnFragmentInteractionListener
-{
+        EmergencyFragment.OnFragmentInteractionListener,
+        MapFragment.OnFragmentInteractionListener,
+        SearchView.OnQueryTextListener,
+        SelectLanguageDialog.OnFragmentInteractionListener{
+
 
 
     private static final String TAG = "MainActivity";
 
 
 
-
+    //public SearchView searchView;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,6 @@ public class MainActivity extends AppCompatActivity implements
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationBehavior());
-
 
         Fragment fragment = new HomeFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -161,7 +162,8 @@ public class MainActivity extends AppCompatActivity implements
                     loadFragment(R.id.frame_container, fragment);
                     return true;
                 case R.id.navigation_place:
-                    Toast.makeText(MainActivity.this, "Place", Toast.LENGTH_SHORT).show();
+                    fragment = new MapFragment();
+                    loadFragment(R.id.frame_container, fragment);
                     return true;
                 case R.id.navigation_user:
                     fragment = new Profife_notLogin_Fragment();
@@ -173,26 +175,28 @@ public class MainActivity extends AppCompatActivity implements
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    //@Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        MenuItem item = menu.findItem(R.id.action_search);
+//        searchView = (SearchView) item.getActionView();
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -202,5 +206,15 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(id, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 }
