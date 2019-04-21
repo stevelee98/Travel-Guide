@@ -121,9 +121,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     }
 
     public void createAccount(final String email, String password, final String username) {
-        Toast.makeText(this,
-                "Dang "
-                , Toast.LENGTH_SHORT).show();
+
         FirebaseAuthentication.getInstance().SignUpWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignUpComplete() {
             @Override
             public void onSignUpComplete(Boolean isSuccess) {
