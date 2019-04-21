@@ -9,34 +9,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hoangviet.mytravelapp.Models.User;
+import com.example.hoangviet.mytravelapp.auth.FirebaseAuthentication;
 import com.example.hoangviet.mytravelapp.helper.BottomNavigationBehavior;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.hoangviet.mytravelapp.services.crud.UserService;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -48,31 +35,21 @@ public class MainActivity extends AppCompatActivity implements
         SelectLanguageDialog.OnFragmentInteractionListener
 {
 
-    //private Toolbar toolbar;
-    //public TextView textView;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
-    private String currentLanguage;
+    private static final String TAG = "MainActivity";
+
+
+
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        currentLanguage = "en_US";
-        mAuth = FirebaseAuth.getInstance();
 
 
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //textView = (TextView) toolbar.findViewById(R.id.txt_cityname);
-        //textView.setText("Home");
-        //Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
@@ -86,32 +63,19 @@ public class MainActivity extends AppCompatActivity implements
         transaction.commit();
 
     }
+
+
+
+
+
     public FirebaseUser getCurrentUser(){
-        try {
-            this.user = mAuth.getCurrentUser();
-
-            Toast.makeText(this,
-                    this.user.getEmail()
-                    , Toast.LENGTH_SHORT).show();
-
-            return this.user;
-        } catch(Exception err){
-            Log.w("ERROR", "signInWithEmail:failure", err);
-            throw err;
-        }
-
+        return FirebaseAuthentication.getInstance().getCurrentUser();
     }
+
     public boolean signOut(){
-        try {
-            mAuth.signOut();
-            return true;
-        } catch (Exception err){
-            Log.w("ERROR", "signOut:failure", err);
-            return false;
-        }
+        return FirebaseAuthentication.getInstance().signOut();
     }
     public void onSelectLanguageFinish(String language){
-        this.currentLanguage = language;
         Locale locale;
         if(language == "en_US"){
             locale = new Locale("en","US");
@@ -137,51 +101,45 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
     }
     public void signIn(String email, String password){
-        Toast.makeText(this,
-                password
-                , Toast.LENGTH_SHORT).show();
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task){
-                        Fragment fragment;
-                        if(task.isSuccessful()){
+        FirebaseAuthentication.getInstance().SignInWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignInComplete() {
+            @Override
+            public void onSignInComplete(Boolean isSuccess) {
+                Fragment fragment;
+                if(isSuccess){
+                    fragment = new Profife_notLogin_Fragment();
+                    loadFragment(R.id.frame_container, fragment);
+                } else {
+                    fragment = new SigninFragment();
+                    loadFragment(R.id.frame_container, fragment);
+                }
+            }
 
-                            fragment = new Profife_notLogin_Fragment();
-                            loadFragment(R.id.frame_container, fragment);
-
-                        } else {
-                            Log.w("ERROR", "signInWithEmail:failure", task.getException());
-                            fragment = new SigninFragment();
-                            loadFragment(R.id.frame_container, fragment);
-                        }
-                    }
-                });
+        });
     }
 
-    public void createAccount(String email, String password) {
+    public void createAccount(final String email, String password, final String username) {
         Toast.makeText(this,
-                "Dang nhap"
+                "Dang "
                 , Toast.LENGTH_SHORT).show();
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>(){
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task){
-                        Fragment fragment;
-                        if(task.isSuccessful()){
+        FirebaseAuthentication.getInstance().SignUpWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignUpComplete() {
+            @Override
+            public void onSignUpComplete(Boolean isSuccess) {
+                Fragment fragment;
+                if(isSuccess){
+                    FirebaseUser user = FirebaseAuthentication.getInstance().getCurrentUser();
+                    User userModel = new User(username,email, "",user.getUid());
+                    UserService.getInstance().createUser(userModel);
+                    fragment = new Profife_notLogin_Fragment();
+                    loadFragment(R.id.frame_container, fragment);
+                } else {
+                    fragment = new SignUpFragment();
+                    loadFragment(R.id.frame_container, fragment);
+                }
+            }
 
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            fragment = new HomeFragment();
-                            loadFragment(R.id.frame_container, fragment);
-                        } else {
-                            fragment = new HomeFragment();
-                            loadFragment(R.id.frame_container, fragment);
-                        }
-                    }
-                });
+        });
     }
 
 

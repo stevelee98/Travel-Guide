@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
@@ -30,6 +31,8 @@ public class SignUpFragment extends Fragment {
     private String mParam2;
 
     public View view;
+
+    private Button btnSignUp;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,6 +67,28 @@ public class SignUpFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        btnSignUp = view.findViewById(R.id.btn_send_signup);
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSignUpClick();
+            }
+        });
+        final MainActivity activity = new MainActivity();
+    }
+    public void onSignUpClick(){
+        EditText emailEditText = view.findViewById(R.id.email_signin);
+        EditText passwordEditText = view.findViewById(R.id.password);
+        EditText usernameEditText = view.findViewById(R.id.username);
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String username = usernameEditText.getText().toString();
+        mListener.createAccount(email,password, username);
     }
 
     @Override
@@ -113,5 +138,6 @@ public class SignUpFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void createAccount(String email, String password, String username);
     }
 }

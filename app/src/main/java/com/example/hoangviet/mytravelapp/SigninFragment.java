@@ -1,6 +1,8 @@
 package com.example.hoangviet.mytravelapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,7 +42,7 @@ import com.google.firebase.auth.FirebaseUser;
  * {@link SigninFragment#newInstance} factory method to create an instance of
  * this fragment.
  */
-public class SigninFragment extends Fragment implements SignUpFragment.OnFragmentInteractionListener {
+public class SigninFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -128,11 +130,14 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
         });
     }
     public void onSignInClick(){
-        EditText emailEditText = view.findViewById(R.id.email_signin);
-        EditText passwordEditText = view.findViewById(R.id.password);
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        mListener.signIn(email,password);
+            EditText emailEditText = view.findViewById(R.id.email_signin);
+            EditText passwordEditText = view.findViewById(R.id.password);
+
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+
+            mListener.signIn(email, password);
+
     }
     public void onSignUpClick(){
         FragmentTransaction transaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
@@ -165,10 +170,6 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
         mListener = null;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this fragment
@@ -181,7 +182,6 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void createAccount(String email, String password);
         void signIn(String email, String password);
     }
 }
