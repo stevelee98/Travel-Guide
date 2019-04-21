@@ -1,32 +1,33 @@
 package com.example.hoangviet.mytravelapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hoangviet.mytravelapp.Models.User;
+import com.example.hoangviet.mytravelapp.auth.FirebaseAuthentication;
 import com.example.hoangviet.mytravelapp.helper.BottomNavigationBehavior;
+import com.example.hoangviet.mytravelapp.services.crud.UserService;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
         ConvenientFragment.OnFragmentInteractionListener,
@@ -35,10 +36,13 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         SignUpFragment.OnFragmentInteractionListener,
         EmergencyFragment.OnFragmentInteractionListener,
         MapFragment.OnFragmentInteractionListener,
-        SearchView.OnQueryTextListener{
+        SearchView.OnQueryTextListener,
+        SelectLanguageDialog.OnFragmentInteractionListener{
 
-    //private Toolbar toolbar;
-    //public TextView textView;
+
+
+    private static final String TAG = "MainActivity";
+
 
 
     //public SearchView searchView;
@@ -48,15 +52,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //textView = (TextView) toolbar.findViewById(R.id.txt_cityname);
-        //textView.setText("Home");
-        //Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Fragment fragment = new HomeFragment();
@@ -66,6 +64,86 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         transaction.commit();
 
     }
+
+
+
+
+
+    public FirebaseUser getCurrentUser(){
+        return FirebaseAuthentication.getInstance().getCurrentUser();
+    }
+
+    public boolean signOut(){
+        return FirebaseAuthentication.getInstance().signOut();
+    }
+    public void onSelectLanguageFinish(String language){
+        Locale locale;
+        if(language == "en_US"){
+            locale = new Locale("en","US");
+        } else {
+            locale = new Locale("vi", "VN");
+        }
+
+        DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
+        Configuration configuration = new Configuration();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+            configuration.setLocale(locale);
+        } else {
+            configuration.locale = locale;
+        }
+
+        getBaseContext().getResources().updateConfiguration(configuration, displayMetrics);
+        Intent main = new Intent(MainActivity.this, MainActivity.class);
+        startActivity(main);
+        finish();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+    public void signIn(String email, String password){
+        FirebaseAuthentication.getInstance().SignInWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignInComplete() {
+            @Override
+            public void onSignInComplete(Boolean isSuccess) {
+                Fragment fragment;
+                if(isSuccess){
+                    fragment = new Profife_notLogin_Fragment();
+                    loadFragment(R.id.frame_container, fragment);
+                } else {
+                    fragment = new SigninFragment();
+                    loadFragment(R.id.frame_container, fragment);
+                }
+            }
+
+        });
+    }
+
+    public void createAccount(final String email, String password, final String username) {
+
+        FirebaseAuthentication.getInstance().SignUpWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignUpComplete() {
+            @Override
+            public void onSignUpComplete(Boolean isSuccess) {
+                Fragment fragment;
+                if(isSuccess){
+                    FirebaseUser user = FirebaseAuthentication.getInstance().getCurrentUser();
+                    User userModel = new User(username,email, "",user.getUid());
+                    UserService.getInstance().createUser(userModel);
+                    fragment = new Profife_notLogin_Fragment();
+                    loadFragment(R.id.frame_container, fragment);
+                } else {
+                    fragment = new SignUpFragment();
+                    loadFragment(R.id.frame_container, fragment);
+                }
+            }
+
+        });
+    }
+
+
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

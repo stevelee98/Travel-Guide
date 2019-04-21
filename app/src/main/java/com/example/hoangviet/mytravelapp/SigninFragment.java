@@ -1,27 +1,48 @@
 package com.example.hoangviet.mytravelapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.annotation.NonNull;
+
+import java.util.Objects;
+
 import android.view.LayoutInflater;
+import android.util.Log;
+import android.text.TextUtils;
+
+import android.widget.Toast;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.util.Objects;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SigninFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SigninFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A simple {@link Fragment} subclass. Activities that contain this fragment
+ * must implement the {@link SigninFragment.OnFragmentInteractionListener}
+ * interface to handle interaction events. Use the
+ * {@link SigninFragment#newInstance} factory method to create an instance of
+ * this fragment.
  */
-public class SigninFragment extends Fragment implements SignUpFragment.OnFragmentInteractionListener {
+public class SigninFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,6 +55,9 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
     public View view;
 
     private Button btnSignUp;
+    private Button btnSignIn;
+
+    private FirebaseAuth mAuth;
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,8 +66,8 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Use this factory method to create a new instance of this fragment using the
+     * provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
@@ -67,33 +91,68 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_signin, container, false);
+//        btnSignUp = (Button) view.findViewById(R.id.btn_signup);
+//        btnSignUp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentTransaction transaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.frame_container,new SignUpFragment());
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//            }
+//        });
+        return view;
+    }
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        btnSignIn = (Button) view.findViewById(R.id.btn_signin);
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSignInClick();
+            }
+        });
         btnSignUp = (Button) view.findViewById(R.id.btn_signup);
+        final MainActivity activity = new MainActivity();
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_container,new SignUpFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
+                onSignUpClick();
             }
         });
-        return view;
+    }
+    public void onSignInClick(){
+            EditText emailEditText = view.findViewById(R.id.email_signin);
+            EditText passwordEditText = view.findViewById(R.id.password);
+
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+
+            mListener.signIn(email, password);
+
+    }
+    public void onSignUpClick(){
+        FragmentTransaction transaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container,new SignUpFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
+
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction();
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -101,8 +160,7 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -112,16 +170,11 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
         mListener = null;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
+     * This interface must be implemented by activities that contain this fragment
+     * to allow an interaction in this fragment to be communicated to the activity
+     * and potentially other fragments contained in that activity.
      * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
@@ -129,6 +182,6 @@ public class SigninFragment extends Fragment implements SignUpFragment.OnFragmen
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void signIn(String email, String password);
     }
 }
