@@ -9,9 +9,6 @@
     android:padding="20dp"
     android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,19 +23,26 @@
 
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/select_language_group">
+        android:layout_height="wrap_content"
+        android:id="@+id/select_language_group"
+        >
         <RadioButton
             android:id="@+id/radio_vietnamese"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/select_language_vietnamese" />
+            android:text="@string/select_language_vietnamese"
+            android:textColor="@color/dark"
+            android:buttonTint="@color/dark"
+            tools:ignore="UnusedAttribute" />
 
         <RadioButton
             android:id="@+id/radio_english"
+            android:textColor="@color/dark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/select_language_english" />
+            android:text="@string/select_language_english"
+            android:buttonTint="@color/dark"
+            tools:ignore="UnusedAttribute"/>
      </RadioGroup>
 
 </LinearLayout>

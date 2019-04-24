@@ -35,7 +35,9 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
         myViewHolder.Name.setText(item.getItemName());
         myViewHolder.countRating.setText(item.getItemRatingCount());
         myViewHolder.disTance.setText(item.getItemDistance());
-        myViewHolder.rating.setRating(Float.parseFloat(item.getItemRating()));
+        myViewHolder.openNow.setText(item.getopenNow());
+        myViewHolder.rating.setRating(Float.parseFloat(item.getItemRating().toString()));
+
     }
 
     @Override
@@ -48,6 +50,8 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
         public TextView countRating;
         public TextView disTance;
         public RatingBar rating;
+        public TextView openNow;
+
 
         public MyViewHolder(View view){
             super(view);
@@ -56,6 +60,7 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
             countRating = (TextView) view.findViewById(R.id.item_num_start);
             disTance = (TextView) view.findViewById(R.id.txt_distance_item);
             rating = (RatingBar) view.findViewById(R.id.item_rating);
+            openNow = (TextView) view.findViewById(R.id.txt_open_now);
         }
     }
 }

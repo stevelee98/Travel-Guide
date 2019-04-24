@@ -149,7 +149,7 @@ public class Profife_notLogin_Fragment extends Fragment {
             public void onGetUserData(User user) {
                 btnProfile.setText(user.getUsername());
                 String avatar = user.getAvatar();
-                Glide.with(getContext())
+                Glide.with(getActivity())
                         .load(avatar)
                         .into(avatarView);
                 btnProfile.setOnClickListener(new View.OnClickListener() {

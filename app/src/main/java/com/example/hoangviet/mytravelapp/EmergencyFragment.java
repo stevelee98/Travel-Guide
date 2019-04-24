@@ -87,51 +87,51 @@ public class EmergencyFragment extends Fragment {
         return view;
     }
 
-    private void prepareEm() {
-        ItemList a = new ItemList("police","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-        itemList.add(a);
-
-        emergencyAdapter.notifyDataSetChanged();
-    }
+//    private void prepareEm() {
+//        ItemList a = new ItemList("police","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
+//        itemList.add(a);
+//
+//        emergencyAdapter.notifyDataSetChanged();
+//    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -167,6 +167,8 @@ public class EmergencyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
+        void onClick(View v);
+
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }

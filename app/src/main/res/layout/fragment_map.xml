@@ -5,19 +5,20 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MapFragment"
-    android:layout_marginBottom="20dp"
+    android:layout_marginBottom="22dp"
     android:orientation="vertical"
+    android:background="@color/white"
     >
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="280dp">
         <com.google.android.gms.maps.MapView
             android:id="@+id/map_fragment"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="280dp"
             />
-        <RelativeLayout
+        <!-- RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
@@ -51,19 +52,21 @@
                 android:singleLine="true"
                 android:inputType="text"/>
 
-        </RelativeLayout>
+        </RelativeLayout -->
 
     </FrameLayout>
 
 
     <TextView
+        android:id="@+id/temp"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/police_stations_or_emegency_assistance_around_you"
         android:textAlignment="center"
         android:padding="5dp"
         android:textStyle="italic"
-        android:textColor="@color/dark_gray"/>
+        android:textColor="@color/dark"/>
 
     <android.support.v7.widget.RecyclerView
         android:background="@color/white"

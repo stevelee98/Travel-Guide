@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import java.util.Objects;
 
 
@@ -23,7 +24,7 @@ import java.util.Objects;
  * Use the {@link ConvenientFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConvenientFragment extends Fragment implements EmergencyFragment.OnFragmentInteractionListener {
+public class ConvenientFragment extends Fragment implements MapFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,6 +37,17 @@ public class ConvenientFragment extends Fragment implements EmergencyFragment.On
     public View view;
     private Toolbar toolbar;
     private CardView cvEmergency;
+    private CardView cvMedical;
+    private CardView cvShoppingMall;
+    private CardView cvBarPub;
+    private CardView cvEntertaiment;
+    private CardView cvNearestHotel;
+    private CardView cvAtm;
+    private CardView cvPublicTransport;
+    private CardView cvConvenientStore;
+    private CardView cvGasStation;
+    private CardView cvParking;
+    private CardView cvCarRepair;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,26 +87,134 @@ public class ConvenientFragment extends Fragment implements EmergencyFragment.On
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view  = inflater.inflate(R.layout.fragment_convenient, container, false);
+
+        //đặt tiêu đề cho toolbar
         toolbar = (Toolbar) view.findViewById(R.id.toolbar_convenient);
         ((AppCompatActivity)Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity)(getActivity())).getSupportActionBar()).setTitle("Explore around you");
 
-        cvEmergency = (CardView) view.findViewById(R.id.cv_emergency);
 
+        cvEmergency = (CardView) view.findViewById(R.id.cv_emergency);
+        cvMedical = (CardView) view.findViewById(R.id.cv_medical);
+        cvShoppingMall = (CardView) view.findViewById(R.id.cv_shopping);
+        cvBarPub = (CardView) view.findViewById(R.id.cv_bar_pub);
+        cvNearestHotel = (CardView) view.findViewById(R.id.cv_nearest_hotel);
+        cvAtm = (CardView) view.findViewById(R.id.cv_atm);
+        cvConvenientStore = (CardView) view.findViewById(R.id.cv_conveniente_store);
+        cvEntertaiment = (CardView) view.findViewById(R.id.cv_entertaiment);
+        cvCarRepair = (CardView) view.findViewById(R.id.cv_car_repair);
+        cvPublicTransport = (CardView) view.findViewById(R.id.cv_public_transport);
+        cvGasStation = (CardView) view.findViewById(R.id.cv_gas_station);
+        cvParking = (CardView) view.findViewById(R.id.cv_parking);
+
+
+        //tìm đồn cảnh sát
         cvEmergency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_container,new MapFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
-//                transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                transaction.add(R.id.frame_container, new EmergencyFragment());
-//                transaction.commit();
+                loadMap("police|fire_station");
+            }
+        });
+
+        //tìm chăm sóc y tế
+        cvMedical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("hospital|pharmacy|doctor");
+            }
+        });
+
+        //tìm chợ hoặc siêu thị
+        cvShoppingMall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("shopping_mall|supermarket|department_store");
+            }
+        });
+
+        //tìm nơi ăn chơi buổi tối
+        cvBarPub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("bar|night_club|casino");
+            }
+        });
+
+        //tìm công viên giải trí
+        cvEntertaiment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("amusement_park|park|rv_park");
+            }
+        });
+
+
+        //tìm atm, ngân hàng
+        cvAtm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("atm|bank");
+            }
+        });
+
+        //tìm khách sạn
+        cvNearestHotel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("lodging");
+            }
+        });
+
+        //tìm cửa hàng tiện lợi
+        cvConvenientStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("convenience_store");
+            }
+        });
+
+        //tìm trạm xăng
+        cvGasStation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("gas_station");
+            }
+        });
+
+        //tìm chỗ đậu xe
+        cvParking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("parking");
+            }
+        });
+
+        //tìm nơi sửa xe
+        cvCarRepair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMap("car_repair");
             }
         });
         return view;
     }
+
+    public void loadMap(String type){
+        Bundle bundle;
+        MapFragment mapFragment;
+
+        bundle = new Bundle();
+        mapFragment = new MapFragment();
+
+        bundle.putString("TYPE", type);
+        mapFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container,mapFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

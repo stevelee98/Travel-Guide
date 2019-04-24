@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+
 import com.example.hoangviet.mytravelapp.Models.User;
 import com.example.hoangviet.mytravelapp.auth.FirebaseAuthentication;
 import com.example.hoangviet.mytravelapp.helper.BottomNavigationBehavior;
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         Profife_notLogin_Fragment.OnFragmentInteractionListener,
         SigninFragment.OnFragmentInteractionListener ,
         SignUpFragment.OnFragmentInteractionListener,
-        EmergencyFragment.OnFragmentInteractionListener,
         MapFragment.OnFragmentInteractionListener,
         SearchView.OnQueryTextListener,
         SelectLanguageDialog.OnFragmentInteractionListener{
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
 
     private static final String TAG = "MainActivity";
-
 
 
     //public SearchView searchView;
@@ -195,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

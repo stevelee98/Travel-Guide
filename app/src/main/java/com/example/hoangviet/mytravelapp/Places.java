@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by DinhTien on 26-12-2015.
- */
 public class Places {
 
     public List<HashMap<String, String>> parse(JSONObject jsonObject) {
@@ -48,14 +45,23 @@ public class Places {
         String latitude = "";
         String longitude = "";
         String reference = "";
+        String rating = "0";
+        String openNow = "-NA-";
 
         try {
             if (!googlePlaceJson.isNull("name")) {
                 placeName = googlePlaceJson.getString("name");
             }
+            if (!googlePlaceJson.isNull("rating")) {
+                rating = googlePlaceJson.getString("rating");
+            }
+            if (!googlePlaceJson.isNull("opening_hours")) {
+                openNow = googlePlaceJson.getJSONObject("opening_hours").getString("open_now");
+            }
             if (!googlePlaceJson.isNull("vicinity")) {
                 vicinity = googlePlaceJson.getString("vicinity");
             }
+
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = googlePlaceJson.getString("reference");
@@ -65,6 +71,8 @@ public class Places {
             googlePlaceMap.put("lat", latitude);
             googlePlaceMap.put("lng", longitude);
             googlePlaceMap.put("reference", reference);
+            googlePlaceMap.put("rating", rating);
+            googlePlaceMap.put("open_now", openNow);
         } catch (JSONException e) {
             e.printStackTrace();
         }

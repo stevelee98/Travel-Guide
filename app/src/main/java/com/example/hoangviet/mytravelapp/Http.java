@@ -10,9 +10,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by DinhTien on 26-12-2015.
- */
 public class Http {
 
     @SuppressLint("LongLogTag")
