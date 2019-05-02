@@ -83,6 +83,7 @@
         android:background="@drawable/button_rounded_corner_color_pink"
         android:textColor="@color/white"
         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,27 +99,37 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_gravity="center">
-        <Button
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/btn_signup_google"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_width="20dp"
-            android:layout_gravity="center"
-            android:text="google"
-            android:background="@drawable/button_rounded_sign_in_with_google"
-            android:textColor="@color/white"
-            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <!--<Button-->
+            <!--android:id="@+id/btn_signup_google"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="google"-->
+            <!--android:background="@drawable/button_rounded_sign_in_with_google"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--/>-->
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/fb_login_button"
+            style="@style/FacebookLoginButton"
             />
-        <Button
-            android:id="@+id/btn_signup_fb"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_width="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_gravity="center"
-            android:text="fb"
-            android:background="@drawable/button_rounded_sign_in_with_fb"
-            android:textColor="@color/white"
-            />
+        <!--<Button-->
+            <!--android:id="@+id/btn_signup_fb"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="fb"-->
+            <!--android:background="@drawable/button_rounded_sign_in_with_fb"-->
+            <!--android:textColor="@color/white"-->
+            <!--/>-->
     </LinearLayout>
+
 </LinearLayout>
