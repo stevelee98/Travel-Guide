@@ -35,4 +35,13 @@
         <item name="android:minHeight">14dip</item>
         <item name="android:maxHeight">14dip</item>
     </style>
+    <style name="FacebookLoginButton">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">20dp</item>
+
+        <item name="android:background">@drawable/button_rounded_sign_in_with_fb</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 </resources>
