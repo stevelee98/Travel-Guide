@@ -163,4 +163,17 @@
     <string name="default_info_snippet">No places found, because location permission is disabled.</string>
     <string name="option_get_place">Get place</string>
     <string name="pick_place">Choose a place</string>
+    <string name="share">Share</string>
+    <string name="save_place">Save place</string>
+    <string name="direction">Direction</string>
+    <string name="website">website</string>
+    <string name="Phone_Number">Phone Number</string>
+    <string name="location_name">location name</string>
+    <string name="image_location">Image</string>
+    <string name="address">address</string>
+    <string name="add_image">Add Image</string>
+    <string name="review_summary">Review Summary</string>
+    <string name="write_a_review">Write A Review</string>
+    <string name="reviews">Reviews</string>
+    <string name="like">Like</string>
 </resources>

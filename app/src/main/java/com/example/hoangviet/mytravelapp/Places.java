@@ -45,7 +45,9 @@ public class Places {
         String latitude = "";
         String longitude = "";
         String reference = "";
+        String photorReference = "";
         String rating = "0";
+        String userTotalRating = "";
         String openNow = "-NA-";
 
         try {
@@ -55,16 +57,27 @@ public class Places {
             if (!googlePlaceJson.isNull("rating")) {
                 rating = googlePlaceJson.getString("rating");
             }
+            if (!googlePlaceJson.isNull("user_ratings_total")) {
+                userTotalRating = googlePlaceJson.getString("user_ratings_total");
+            }
             if (!googlePlaceJson.isNull("opening_hours")) {
                 openNow = googlePlaceJson.getJSONObject("opening_hours").getString("open_now");
             }
             if (!googlePlaceJson.isNull("vicinity")) {
                 vicinity = googlePlaceJson.getString("vicinity");
             }
+            if (!googlePlaceJson.isNull("photos")) {
+                //photorReference = googlePlaceJson.getJSONObject("photos").getString("photo_reference");
+                photorReference = googlePlaceJson.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
+
+
+            }
 
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = googlePlaceJson.getString("reference");
+
+
             //googlePlaceMap.put("icon",icon);
             googlePlaceMap.put("place_name", placeName);
             googlePlaceMap.put("vicinity", vicinity);
@@ -73,6 +86,9 @@ public class Places {
             googlePlaceMap.put("reference", reference);
             googlePlaceMap.put("rating", rating);
             googlePlaceMap.put("open_now", openNow);
+            googlePlaceMap.put("photo_reference", photorReference);
+            googlePlaceMap.put("user_ratings_total", userTotalRating);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

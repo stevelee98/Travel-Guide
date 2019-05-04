@@ -67,6 +67,9 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             String vicinity = googlePlace.get("vicinity");
             String rating = "0";
             String open_now = "";
+            String photoReference = "";
+            String userTotalRating = "";
+
 
             if(googlePlace.get("open_now").equals("true")){
                     open_now = "open";
@@ -76,6 +79,13 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             }
             else{
                 open_now ="";
+            }
+
+            if(googlePlace.get("user_ratings_total") != null){
+                userTotalRating = googlePlace.get("user_ratings_total");
+            }
+            if(googlePlace.get("photo_reference") != null){
+                photoReference = googlePlace.get("photo_reference");
             }
 
             rating = googlePlace.get("rating");
@@ -92,7 +102,7 @@ public class PlacesDisplayTask extends AsyncTask<Object, Integer, List<HashMap<S
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
 
             try{
-                ItemList item = new ItemList(placeName,rating,rating,"2 km",open_now);
+                ItemList item = new ItemList(placeName,vicinity,rating, userTotalRating,"2 km",open_now, photoReference);
                 list.add(item);
             }
             catch (NullPointerException e){

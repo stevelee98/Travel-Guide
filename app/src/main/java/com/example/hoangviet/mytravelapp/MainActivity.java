@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         SignUpFragment.OnFragmentInteractionListener,
         MapFragment.OnFragmentInteractionListener,
         SearchView.OnQueryTextListener,
-        SelectLanguageDialog.OnFragmentInteractionListener{
+        SelectLanguageDialog.OnFragmentInteractionListener,
+        PlaceInfor.OnFragmentInteractionListener{
 
 
 
@@ -51,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-
-
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -63,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         transaction.commit();
 
     }
-
-
-
 
 
     public FirebaseUser getCurrentUser(){

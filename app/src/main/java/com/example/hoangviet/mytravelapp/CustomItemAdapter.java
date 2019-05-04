@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +19,17 @@ import java.util.List;
 public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.MyViewHolder> {
     private Context context;
     private List<ItemList> itemList;
+
+    private static OnItemClickListener mOnClickItem;
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener mOnClickItem) {
+        this.mOnClickItem = mOnClickItem;
+    }
+
 
     public CustomItemAdapter(Context context, List<ItemList> itemList){
         this.context = context;
@@ -33,10 +46,17 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         ItemList item = itemList.get(i);
         myViewHolder.Name.setText(item.getItemName());
-        myViewHolder.countRating.setText(item.getItemRatingCount());
+        myViewHolder.numStar.setText(item.getItemNumStar());
         myViewHolder.disTance.setText(item.getItemDistance());
         myViewHolder.openNow.setText(item.getopenNow());
-        myViewHolder.rating.setRating(Float.parseFloat(item.getItemRating().toString()));
+        myViewHolder.ratingBar.setRating(Float.parseFloat(item.getItemNumStar().toString()));
+
+//        myViewHolder.parrentLayout.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(this, "a", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
@@ -45,23 +65,38 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
         return itemList.size();
     }
 
-    public class MyViewHolder extends  RecyclerView.ViewHolder {
+    public class MyViewHolder extends  RecyclerView.ViewHolder{
         public TextView Name;
-        public TextView countRating;
+        public TextView numStar;
         public TextView disTance;
-        public RatingBar rating;
+        public RatingBar ratingBar;
         public TextView openNow;
+        //public LinearLayout parrentLayout;
 
 
-        public MyViewHolder(View view){
+        public MyViewHolder(final View view){
             super(view);
 
             Name = (TextView) view.findViewById(R.id.txt_item_name);
-            countRating = (TextView) view.findViewById(R.id.item_num_start);
+            numStar = (TextView) view.findViewById(R.id.item_num_start);
             disTance = (TextView) view.findViewById(R.id.txt_distance_item);
-            rating = (RatingBar) view.findViewById(R.id.item_rating);
+            ratingBar = (RatingBar) view.findViewById(R.id.item_rating);
             openNow = (TextView) view.findViewById(R.id.txt_open_now);
+
+            //parrentLayout = view.findViewById(R.id.parent_layout);
+
+            view.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(mOnClickItem != null){
+                        mOnClickItem.onItemClick(view, getLayoutPosition());
+                    }
+                }
+            });
+
         }
+
     }
+
 }
 

@@ -20,6 +20,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +54,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
@@ -102,7 +105,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMapLoadedCallback,
         LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener,
+        PlaceInfor.OnFragmentInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -212,7 +216,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         view = inflater.inflate(R.layout.fragment_map, container, false);
         temp = (TextView) view.findViewById(R.id.temp);
 
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         StringBuilder stringBuilder = new StringBuilder();
         type = bundle.getString("TYPE");
         stringBuilder.append(type);
@@ -253,6 +257,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
         list = new ArrayList<>();
         CustomItemAdapter = new CustomItemAdapter(getActivity(), list);
+        CustomItemAdapter.setOnItemClickListener(new CustomItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Bundle bundle1 = new Bundle();
+                PlaceInfor placeInfor = new PlaceInfor();
+
+                bundle1.putString("NAME", list.get(position).getItemName().toString());
+                bundle1.putString("RATING",list.get(position).getItemNumStar().toString() );
+                bundle1.putString("ADDRESS", list.get(position).getAddress().toString());
+                bundle1.putString("PHOTO_REFER", list.get(position).getPhotoReference().toString());
+                bundle1.putString("TOTAL_RATING", list.get(position).getUserTotalRating().toString());
+
+                placeInfor.setArguments(bundle1);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container, placeInfor);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(CustomItemAdapter);
@@ -340,12 +364,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 public void onComplete(@NonNull Task<Location> task) {
 
                     if (task.isSuccessful()) {
-                        // Set the map's camera position to the current location of the device.
                         mLastKnownLocation = task.getResult();
 
                         latitude = mLastKnownLocation.getLatitude();
                         longitude = mLastKnownLocation.getLongitude();
 
+                        //chuỗi search nearby trên google
+                        // trả về kết quả Jsons
                         StringBuilder googlePlacesUrl =
                                 new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
 
@@ -534,10 +559,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-    @Override
-    public void onMapLoaded() {
-        dialog.dismiss();
-    }
 
     private void getLocationPermission() {
         /*
@@ -595,6 +616,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+
+    @Override
+    public void onMapLoaded() {
+        dialog.dismiss();
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -727,6 +753,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 
