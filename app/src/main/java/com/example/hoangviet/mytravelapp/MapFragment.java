@@ -131,7 +131,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     private View view;
     private GoogleMap mMap;
     private MapView mapView;
-    private EditText mSearchText;
 
     private UiSettings uiSettings;
     AlertDialog dialog;
@@ -268,6 +267,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 bundle1.putString("ADDRESS", list.get(position).getAddress().toString());
                 bundle1.putString("PHOTO_REFER", list.get(position).getPhotoReference().toString());
                 bundle1.putString("TOTAL_RATING", list.get(position).getUserTotalRating().toString());
+                bundle1.putString("PLACE_ID", list.get(position).getItemPlaceID().toString());
 
                 placeInfor.setArguments(bundle1);
 
@@ -404,106 +404,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-//    private void init() {
-//        Log.d(TAG, "init: initializing");
-//
-//        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-//                if (actionId == EditorInfo.IME_ACTION_SEARCH
-//                        || actionId == EditorInfo.IME_ACTION_DONE
-//                        || keyEvent != null
-//                        && keyEvent.getAction() == KeyEvent.ACTION_DOWN
-//                        && keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-//
-//                    //textView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-//                    //execute our method for searching
-//                    geoLocate();
-//
-//
-//                }
-//
-//                return false;
-//            }
-//        });
-//    }
-//
-//    private void geoLocate() {
-//        Log.d(TAG, "geoLocate: geolocating");
-//
-//        if (mLocationPermissionGranted) {
-//            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                // TODO: Consider calling
-//                //    ActivityCompat#requestPermissions
-//                // here to request the missing permissions, and then overriding
-//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                //                                          int[] grantResults)
-//                // to handle the case where the user grants the permission. See the documentation
-//                // for ActivityCompat#requestPermissions for more details.
-//                return;
-//            }
-//            Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-//
-//            locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
-//                @Override
-//                public void onComplete(@NonNull Task<Location> task) {
-//                    if (task.isSuccessful()) {
-//                        // Set the map's camera position to the current location of the device.
-//                        mLastKnownLocation = task.getResult();
-//
-//                        latitude = mLastKnownLocation.getLatitude();
-//                        longitude = mLastKnownLocation.getLongitude();
-//
-//                        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-//                        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-//                        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-//                        googlePlacesUrl.append("&types=" + "police" );
-//                        //googlePlacesUrl.append("&keyword=" + searchString);
-//                        googlePlacesUrl.append("&sensor=true");
-//                        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
-//
-//                        // Toast.makeText(getActivity(), googlePlacesUrl.toString(), Toast.LENGTH_SHORT).show();
-//                        //temp.setText(googlePlacesUrl.toString());
-//
-//                        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-//                        Object[] toPass = new Object[2];
-//                        toPass[0] = mMap;
-//                        toPass[1] = googlePlacesUrl.toString();
-//                        googlePlacesReadTask.execute(toPass);
-//
-//
-//                    } else {
-//                        Log.d(TAG, "Current location is null. Using defaults.");
-//                        Log.e(TAG, "Exception: %s", task.getException());
-//                        mMap.moveCamera(CameraUpdateFactory
-//                                .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-//                        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-//                    }
-//                }
-//            });
-//        }
-//                    //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=10.042957,106.592643&radius=5000&types=congan&sensor=true&key=AIzaSyC3OjUhJ2nBCSmOfVz4kIcWAuwI_kaxgF8
-//
-//        String searchString = mSearchText.getText().toString();
-//
-//
-//
-////        Geocoder geocoder = new Geocoder(getContext().getApplicationContext());
-////        List<Address> list = new ArrayList<>();
-////        try{
-////            list = geocoder.getFromLocationName(searchString, 1);
-////        }catch (IOException e){
-////            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-////        }
-////
-////        if(list.size() > 0){
-////            Address address = list.get(0);
-////
-////            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-////            Toast.makeText(getActivity(), address.toString(), Toast.LENGTH_SHORT).show();
-////
-////        }
-//    }
 
 
     private void getDeviceLocation() {
@@ -557,8 +457,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
         mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
     }
-
-
 
     private void getLocationPermission() {
         /*

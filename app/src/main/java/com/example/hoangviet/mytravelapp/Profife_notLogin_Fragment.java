@@ -1,6 +1,8 @@
 package com.example.hoangviet.mytravelapp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +47,7 @@ public class Profife_notLogin_Fragment extends Fragment {
     private Button btnSignIn;
     private Button btnSignOut;
     private ImageView avatarView;
+    private ProgressDialog progressBar;
 
     public Profife_notLogin_Fragment() {
         // Required empty public constructor
@@ -113,8 +116,17 @@ public class Profife_notLogin_Fragment extends Fragment {
         });
 
         try {
+            progressBar = new ProgressDialog(getContext());
+            progressBar.setCancelable(true);
+            progressBar.setMessage("Please wait...");
+            progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+            progressBar.show();
             getCurrentUser();
+
         } catch (Exception err){
+            progressBar.cancel();
+        } finally {
 
         }
         return view;
@@ -123,6 +135,7 @@ public class Profife_notLogin_Fragment extends Fragment {
         boolean isSignOut = mListener.signOut();
 
         if(isSignOut == true){
+
             this.btnProfile.setText(R.string.sign_in);
             this.btnSignOut.setVisibility(View.GONE);
             this.avatarView.setImageResource(R.drawable.user);
@@ -135,6 +148,7 @@ public class Profife_notLogin_Fragment extends Fragment {
                     transaction.commit();
                 }
             });
+
         } else {
 
         }
@@ -159,8 +173,10 @@ public class Profife_notLogin_Fragment extends Fragment {
                     }
                 });
                 btnSignOut.setVisibility(View.VISIBLE);
+                progressBar.cancel();
             }
         });
+
     }
     public void onBtnProfileClick(){
 

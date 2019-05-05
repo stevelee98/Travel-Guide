@@ -35,7 +35,6 @@ public class FestivalAdapter extends RecyclerView.Adapter<FestivalAdapter.MyView
 
         Glide.with(context).load(item.getImgView()).into(myViewHolder.imageView);
 
-        /* bắt sự kiện click của card view tại đây*/
     }
 
     @Override

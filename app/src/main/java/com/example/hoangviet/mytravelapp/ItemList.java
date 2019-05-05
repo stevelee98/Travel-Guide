@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class ItemList extends HashMap<String, String> {
     private String itemName;
+    private String itemPlaceID;
     private String itemNumStar;
     private String itemDistance;
     private String openNow;
@@ -15,7 +16,7 @@ public class ItemList extends HashMap<String, String> {
     public ItemList() {
     }
 
-    public ItemList(String itemName,String address, String itemNumStar,String userTotalRating, String itemDistance, String openNow, String photoReference) {
+    public ItemList(String itemName,String itemPlaceID, String address, String itemNumStar,String userTotalRating, String itemDistance, String openNow, String photoReference) {
         this.itemName = itemName;
         this.itemNumStar = itemNumStar;
         this.itemDistance = itemDistance;
@@ -23,6 +24,7 @@ public class ItemList extends HashMap<String, String> {
         this.address = address;
         this.photoReference = photoReference;
         this.userTotalRating = userTotalRating;
+        this.itemPlaceID = itemPlaceID;
     }
 
     public String getItemName() {
@@ -79,5 +81,13 @@ public class ItemList extends HashMap<String, String> {
 
     public void setUserTotalRating(String userTotalRating) {
         this.userTotalRating = userTotalRating;
+    }
+
+    public String getItemPlaceID() {
+        return itemPlaceID;
+    }
+
+    public void setItemPlaceID(String itemPlaceID) {
+        this.itemPlaceID = itemPlaceID;
     }
 }

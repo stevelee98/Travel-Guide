@@ -24,6 +24,14 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@id/toolbar">
 
+
+            <ImageView
+                android:id="@+id/img_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/hotel_time_quare_sg"
+                android:background="@color/dark_gray"
+                />
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"

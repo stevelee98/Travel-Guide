@@ -1,6 +1,7 @@
 package com.example.hoangviet.mytravelapp;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -23,10 +24,26 @@ import android.widget.Toast;
 
 
 import com.example.hoangviet.mytravelapp.Models.User;
+import com.example.hoangviet.mytravelapp.UI.Dialog.SimpleMessage;
 import com.example.hoangviet.mytravelapp.auth.FirebaseAuthentication;
 import com.example.hoangviet.mytravelapp.helper.BottomNavigationBehavior;
 import com.example.hoangviet.mytravelapp.services.crud.UserService;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 import java.util.Locale;
 
@@ -43,15 +60,30 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
 
     private static final String TAG = "MainActivity";
+    private ProgressDialog progressBar;
+    private int RC_SIGN_IN = 123;
+    private GoogleSignInClient mGoogleSignInClient;
 
-
-    //public SearchView searchView;
+    //public SearchVpubliciew searchView;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+<<<<<<< HEAD
+=======
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+
+
+
+>>>>>>> bb0834fd252214516ac079d059740bcb48d67849
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -62,14 +94,66 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         transaction.commit();
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseAuthentication.mAuth.addAuthStateListener(FirebaseAuthentication.mAuthListener);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+        fragment.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 
+<<<<<<< HEAD
+=======
+    public void handleSignInResult(Task<GoogleSignInAccount> completedTask){
+        FirebaseAuthentication.getInstance().handleGoogleSignInResult(completedTask, new FirebaseAuthentication.AddOnSignInByGoogleComplete() {
+            @Override
+            public void onSignUpComplete(Boolean isSuccess, GoogleSignInAccount account) {
+                FirebaseUser user = FirebaseAuthentication.getInstance().getCurrentUser();
+                User userModel = new User(user.getDisplayName(),user.getEmail(), "https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png",user.getUid());
+                UserService.getInstance().createUser(userModel);
+                Fragment fragment;
+                fragment = new Profife_notLogin_Fragment();
+                loadFragment(R.id.frame_container, fragment);
+            }
+
+            @Override
+            public void onSignUpError() {
+                SimpleMessage errorMessage = new SimpleMessage();
+                errorMessage.setValue(getResources().getString(R.string.sign_up_error_title),getResources().getString(R.string.sign_up_error_message));
+                errorMessage.show(getSupportFragmentManager(),"signup_error");
+            }
+        });
+    }
+
+
+>>>>>>> bb0834fd252214516ac079d059740bcb48d67849
     public FirebaseUser getCurrentUser(){
         return FirebaseAuthentication.getInstance().getCurrentUser();
     }
 
     public boolean signOut(){
-        return FirebaseAuthentication.getInstance().signOut();
+
+        try {
+            LoginManager.getInstance().logOut();
+            mGoogleSignInClient.signOut();
+        } catch(Exception err){
+            mGoogleSignInClient.signOut();
+        } finally {
+            Boolean isSignOut = FirebaseAuthentication.getInstance().signOut();
+            if(isSignOut) {
+                finish();
+                Intent main = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(main);
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
     public void onSelectLanguageFinish(String language){
         Locale locale;
@@ -94,10 +178,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+
     public void signIn(String email, String password){
         FirebaseAuthentication.getInstance().SignInWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignInComplete() {
             @Override
@@ -115,6 +196,39 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         });
     }
 
+    public void onSignInFacebookStart(){
+        progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);
+        progressBar.setMessage("Please wait...");
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.show();
+    }
+
+    public void signInByFacebook(AccessToken accessToken){
+        FirebaseAuthentication.getInstance().handleFacebookAccessToken(accessToken, new FirebaseAuthentication.AddOnSignInByFacebookComplete() {
+            @Override
+            public void onSignUpComplete(Boolean isSuccess) {
+                Fragment fragment;
+                if(isSuccess){
+                    FirebaseUser user = FirebaseAuthentication.getInstance().getCurrentUser();
+                    User userModel = new User(user.getDisplayName(),user.getEmail(), "https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png",user.getUid());
+                    UserService.getInstance().createUser(userModel);
+                    fragment = new Profife_notLogin_Fragment();
+                    loadFragment(R.id.frame_container, fragment);
+                    progressBar.cancel();
+                } else {
+                    progressBar.cancel();
+                    SimpleMessage errorMessage = new SimpleMessage();
+                    errorMessage.setValue("Dang nhap bi loi",getResources().getString(R.string.sign_up_error_message));
+                    errorMessage.show(getSupportFragmentManager(),"signup_error");
+                    fragment = new SigninFragment();
+                    loadFragment(R.id.frame_container, fragment);
+
+                }
+            }
+        });
+    }
+
     public void createAccount(final String email, String password, final String username) {
 
         FirebaseAuthentication.getInstance().SignUpWithEmailAndPassword(email, password, new FirebaseAuthentication.AddOnSignUpComplete() {
@@ -123,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 Fragment fragment;
                 if(isSuccess){
                     FirebaseUser user = FirebaseAuthentication.getInstance().getCurrentUser();
-                    User userModel = new User(username,email, "",user.getUid());
+                    User userModel = new User(username,email, "https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png",user.getUid());
                     UserService.getInstance().createUser(userModel);
                     fragment = new Profife_notLogin_Fragment();
                     loadFragment(R.id.frame_container, fragment);

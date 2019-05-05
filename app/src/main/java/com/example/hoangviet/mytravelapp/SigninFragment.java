@@ -1,39 +1,40 @@
 package com.example.hoangviet.mytravelapp;
 
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.annotation.NonNull;
 
 import java.util.Objects;
 
 import android.view.LayoutInflater;
 import android.util.Log;
-import android.text.TextUtils;
 
 import android.widget.Toast;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.hoangviet.mytravelapp.UI.Dialog.SimpleMessage;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment
@@ -57,9 +58,18 @@ public class SigninFragment extends Fragment  {
     private Button btnSignUp;
     private Button btnSignIn;
 
+    private LoginButton loginButton;
+    private CallbackManager mCallbackManager;
+
+
     private FirebaseAuth mAuth;
 
     private OnFragmentInteractionListener mListener;
+    private GoogleSignInClient mGoogleSignInClient;
+
+    private ProgressDialog progressBar;
+
+    private int RC_SIGN_IN = 123;
 
     public SigninFragment() {
         // Required empty public constructor
@@ -86,10 +96,24 @@ public class SigninFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // In fragment class callback
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            mListener.handleSignInResult(task);
+        }
+        this.mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -97,17 +121,61 @@ public class SigninFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_signin, container, false);
-//        btnSignUp = (Button) view.findViewById(R.id.btn_signup);
-//        btnSignUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentTransaction transaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
-//                transaction.replace(R.id.frame_container,new SignUpFragment());
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-//            }
-//        });
+        FacebookSdk.sdkInitialize(FacebookSdk.getApplicationContext());
+
+        this.loginButton = view.findViewById(R.id.fb_login_button);
+
+        this.mCallbackManager = CallbackManager.Factory.create();
+
+        loginButton.setReadPermissions("email","public_profile");
+        this.loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                mListener.onSignInFacebookStart();
+                mListener.signInByFacebook(loginResult.getAccessToken());
+
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("FACEBOOK", "facebook:onCancel");
+                SimpleMessage errorMessage = new SimpleMessage();
+                errorMessage.setValue("Khong dang nhap a",getResources().getString(R.string.sign_up_error_message));
+                errorMessage.show(getFragmentManager(),"signup_error");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("FACEBOOK", "facebook:onError", error);
+                SimpleMessage errorMessage = new SimpleMessage();
+                errorMessage.setValue("Dang nhap bi loi a",getResources().getString(R.string.sign_up_error_message));
+                errorMessage.show(getFragmentManager(),"signup_error");
+            }
+        });
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(getContext(),gso);
+
+        SignInButton signInButton = view.findViewById(R.id.btn_signup_google);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+
         return view;
+    }
+    private void showMessage(){
+        SimpleMessage errorMessage = new SimpleMessage();
+        errorMessage.setValue(getResources().getString(R.string.sign_up_error_title),getResources().getString(R.string.sign_up_error_message));
+        errorMessage.show(getFragmentManager(),"signup_error");
     }
     @Override
     public void onActivityCreated (Bundle savedInstanceState){
@@ -132,12 +200,16 @@ public class SigninFragment extends Fragment  {
     public void onSignInClick(){
             EditText emailEditText = view.findViewById(R.id.email_signin);
             EditText passwordEditText = view.findViewById(R.id.password);
+            if(this.isEmpty(emailEditText) || this.isEmpty(passwordEditText)){
+                SimpleMessage errorMessage = new SimpleMessage();
+                errorMessage.setValue(getContext().getResources().getString(R.string.simple_dialog_tilte),getContext().getResources().getString(R.string.simple_dialog_message));
+                errorMessage.show(getFragmentManager(),"signin_error_message");
+            } else {
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
 
-            String email = emailEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-
-            mListener.signIn(email, password);
-
+                mListener.signIn(email, password);
+            }
     }
     public void onSignUpClick(){
         FragmentTransaction transaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
@@ -145,7 +217,9 @@ public class SigninFragment extends Fragment  {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
+    protected boolean isEmpty(EditText editText) {
+        return (editText.getText().toString().equals(""));
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
@@ -182,6 +256,9 @@ public class SigninFragment extends Fragment  {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
+        void onSignInFacebookStart();
         void signIn(String email, String password);
+        void signInByFacebook(AccessToken accessToken);
+        void handleSignInResult(Task<GoogleSignInAccount> completedTask);
     }
 }

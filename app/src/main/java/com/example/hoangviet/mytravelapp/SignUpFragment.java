@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.hoangviet.mytravelapp.UI.Dialog.SimpleMessage;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,10 +86,19 @@ public class SignUpFragment extends Fragment {
     public void onSignUpClick(){
         EditText emailEditText = view.findViewById(R.id.email_signin);
         EditText passwordEditText = view.findViewById(R.id.password);
+        EditText repasswordEditText = view.findViewById(R.id.retype_password);
         EditText usernameEditText = view.findViewById(R.id.username);
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
+        String repassword = repasswordEditText.getText().toString();
         String username = usernameEditText.getText().toString();
+        SimpleMessage errorMessage = new SimpleMessage();
+
+        errorMessage.setValue(getContext().getResources().getString(R.string.sign_up_error_title),getContext().getResources().getString(R.string.sign_up_error_message));
+        errorMessage.show(getFragmentManager(),"signup_error");
+
+
+
         mListener.createAccount(email,password, username);
     }
 
