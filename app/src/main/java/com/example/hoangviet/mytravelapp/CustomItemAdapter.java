@@ -51,13 +51,6 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
         myViewHolder.openNow.setText(item.getopenNow());
         myViewHolder.ratingBar.setRating(Float.parseFloat(item.getItemNumStar().toString()));
 
-//        myViewHolder.parrentLayout.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(this, "a", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
     }
 
     @Override
@@ -71,7 +64,6 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
         public TextView disTance;
         public RatingBar ratingBar;
         public TextView openNow;
-        //public LinearLayout parrentLayout;
 
 
         public MyViewHolder(final View view){
@@ -83,7 +75,6 @@ public class CustomItemAdapter extends RecyclerView.Adapter<CustomItemAdapter.My
             ratingBar = (RatingBar) view.findViewById(R.id.item_rating);
             openNow = (TextView) view.findViewById(R.id.txt_open_now);
 
-            //parrentLayout = view.findViewById(R.id.parent_layout);
 
             view.setOnClickListener(new View.OnClickListener(){
                 @Override

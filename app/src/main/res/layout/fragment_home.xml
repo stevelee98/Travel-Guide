@@ -25,7 +25,12 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@id/toolbar"
             >
-
+            <ImageView
+                android:background="@color/white"
+                android:id="@+id/avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/hcm_avatar"/>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -54,4 +59,132 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_marginBottom="20dp"
             />
+
+    <!--LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/about_city"
+            android:textSize="18dp"
+            android:textColor="@color/dark"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Explore"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyan_700"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_margin="3dp"
+            android:id="@+id/rv_explore"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Food and drink"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/cyan_700"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_margin="3dp"
+            android:id="@+id/rv_food_and_drink"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Entertainment"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyan_700"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_margin="3dp"
+            android:id="@+id/rv_entertainment"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Festival"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyan_700"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_margin="3dp"
+            android:id="@+id/rv_festival"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal"
+            />
+
+    </LinearLayout -->
+
 </android.support.design.widget.CoordinatorLayout>

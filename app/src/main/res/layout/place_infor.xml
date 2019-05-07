@@ -27,6 +27,7 @@
 
             <ImageView
                 android:id="@+id/img_view"
+                android:backgroundTint="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/hotel_time_quare_sg"
@@ -96,6 +97,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Number of rating"
+                        android:textColor="@color/dark"/>
+                    <TextView
+                        android:layout_marginStart="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/total_rating"
                         android:textColor="@color/dark"/>
                 </LinearLayout>
 
@@ -261,14 +268,14 @@
                     android:textColor="@color/dark"/>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/place_image"
+                    android:id="@+id/rv_place_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
                     android:clipToPadding="false"
                     android:scrollbars="horizontal" />
 
-                <Button
+                <!--Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -277,10 +284,12 @@
                     android:drawablePadding="5dp"
                     android:padding="10dp"
                     android:text="@string/add_image"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark"/ -->
             </LinearLayout>
 
-            <LinearLayout
+            <!--
+              <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -505,6 +514,8 @@
                     android:clipToPadding="false"
                     android:scrollbars="vertical" />
             </LinearLayout>
+             -->
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

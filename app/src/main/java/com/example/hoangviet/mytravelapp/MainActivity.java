@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-<<<<<<< HEAD
-=======
         FacebookSdk.sdkInitialize(getApplicationContext());
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -82,8 +80,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
 
 
-
->>>>>>> bb0834fd252214516ac079d059740bcb48d67849
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -107,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     }
 
 
-<<<<<<< HEAD
-=======
     public void handleSignInResult(Task<GoogleSignInAccount> completedTask){
         FirebaseAuthentication.getInstance().handleGoogleSignInResult(completedTask, new FirebaseAuthentication.AddOnSignInByGoogleComplete() {
             @Override
@@ -130,8 +124,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         });
     }
 
-
->>>>>>> bb0834fd252214516ac079d059740bcb48d67849
     public FirebaseUser getCurrentUser(){
         return FirebaseAuthentication.getInstance().getCurrentUser();
     }

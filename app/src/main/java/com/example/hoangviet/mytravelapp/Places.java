@@ -13,7 +13,14 @@ public class Places {
     public List<HashMap<String, String>> parse(JSONObject jsonObject) {
         JSONArray jsonArray = null;
         try {
-            jsonArray = jsonObject.getJSONArray("results");
+            if(!jsonObject.isNull("results")){
+                jsonArray = jsonObject.getJSONArray("results");
+
+            }
+            if(!jsonObject.isNull("candidates")){
+                jsonArray = jsonObject.getJSONArray("candidates");
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -67,8 +74,13 @@ public class Places {
             if (!googlePlaceJson.isNull("vicinity")) {
                 vicinity = googlePlaceJson.getString("vicinity");
             }
+            if (!googlePlaceJson.isNull("formatted_address")) {
+                vicinity = googlePlaceJson.getString("formatted_address");
+            }
+            if (!googlePlaceJson.isNull("place_id")) {
+                placeID = googlePlaceJson.getString("place_id");
+            }
             if (!googlePlaceJson.isNull("photos")) {
-                //photorReference = googlePlaceJson.getJSONObject("photos").getString("photo_reference");
                 photorReference = googlePlaceJson.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
 
 
@@ -76,8 +88,7 @@ public class Places {
 
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
-            reference = googlePlaceJson.getString("reference");
-            placeID = googlePlaceJson.getString("place_id");
+
 
             //googlePlaceMap.put("icon",icon);
             googlePlaceMap.put("place_name", placeName);

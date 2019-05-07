@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.android.gms.plus.PlusOneDummyView.TAG;
@@ -61,7 +63,7 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
     private static final String ARG_PARAM2 = "param2";
 
 
-
+    private static final int PLACE_PHOTO = 1;
     private static final String GOOGLE_API_KEY = "AIzaSyC3OjUhJ2nBCSmOfVz4kIcWAuwI_kaxgF8";
 
 
@@ -73,8 +75,8 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
     String[] mPlaceTypeName = null;
 
     private RecyclerView recyclerView;
-    private CustomItemAdapter CustomItemAdapter;
-    private List<ItemList> list;
+    private PlacePhotoAdapter placePhotoAdapter;
+    private List<PlacePhotoItem> list;
     private GoogleMap mMap;
     private GeoDataClient mGeoDataClient;
     private PlaceDetectionClient mPlaceDetectionClient;
@@ -163,10 +165,10 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
         String ptRef = bundle.getString("PHOTO_REFER");
 
         photoRequest.append(ptRef);
-        photoRequest.append("&key="+GOOGLE_API_KEY);
+        photoRequest.append("&key=" + GOOGLE_API_KEY);
 
+        //load avatar của địa điểm
         Glide.with(this).load(photoRequest.toString()).into(imageView);
-
 
         String name = bundle.getString("NAME");
         placeName.setText(name.toString());
@@ -184,55 +186,32 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
 
         placeID = bundle.getString("PLACE_ID");
 
-        if (mLocationPermissionGranted) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "Current location is null. Using defaults.");
-                Toast.makeText(getContext(), "Vui lòng bật định vị", Toast.LENGTH_SHORT).show();
-            }
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv_place_image);
 
-            Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+        list = new ArrayList<>();
+        placePhotoAdapter = new PlacePhotoAdapter(getActivity(), list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(placePhotoAdapter);
 
-            locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
 
-                    if (task.isSuccessful()) {
-                        mLastKnownLocation = task.getResult();
+        //load hình ảnh địa điểm
+        StringBuilder placePhotoUrl =
+                new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?placeid=");
 
-                        latitude = mLastKnownLocation.getLatitude();
-                        longitude = mLastKnownLocation.getLongitude();
+        placePhotoUrl.append(placeID.toString());
+        placePhotoUrl.append("&fields=photo");
+        placePhotoUrl.append("&key=" + GOOGLE_API_KEY);
 
-                        //chuỗi search place photo
-                        // trả về kết quả Jsons
-                        StringBuilder googlePlacesUrl =
-                                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+        Object[] toPass = new Object[5];
+        toPass[0] = PLACE_PHOTO;
+        toPass[1] = placePhotoUrl.toString();
+        toPass[2] = recyclerView;
+        toPass[3] = placePhotoAdapter;
+        toPass[4] = list;
+        googlePlacesReadTask.execute(toPass);
 
-                        googlePlacesUrl.append("type=" );
-                        googlePlacesUrl.append("&location=" + latitude + "," + longitude);
-                        googlePlacesUrl.append("&radius=" + 3000);
-                        googlePlacesUrl.append("&sensor=true");
-                        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
-
-                        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-                        Object[] toPass = new Object[5];
-                        toPass[0] = mMap;
-                        toPass[1] = googlePlacesUrl.toString();
-                        toPass[2] = recyclerView;
-                        toPass[3] = CustomItemAdapter;
-                        toPass[4] = list;
-                        googlePlacesReadTask.execute(toPass);
-
-                    }
-                    else {
-                        Log.d(TAG, "Current location is null. Using defaults.");
-                        Log.e(TAG, "Exception: %s", task.getException());
-
-                    }
-                }
-            });
-        }
 
         return view;
     }
@@ -271,7 +250,7 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -307,6 +286,7 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
             mLocationPermissionGranted = false;
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
@@ -318,8 +298,7 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
-                }
-                else{
+                } else {
 
                     Toast.makeText(getActivity(), "location is disable", Toast.LENGTH_LONG).show();
                 }
@@ -327,6 +306,7 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
         }
         updateLocationUI();
     }
+
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -341,7 +321,7 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
                 mLastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
