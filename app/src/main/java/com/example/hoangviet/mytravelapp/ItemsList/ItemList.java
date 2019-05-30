@@ -1,8 +1,10 @@
-package com.example.hoangviet.mytravelapp;
+package com.example.hoangviet.mytravelapp.ItemsList;
 
 import java.util.HashMap;
 
 public class ItemList extends HashMap<String, String> {
+    private double latitude;
+    private double longtitude;
     private String itemName;
     private String itemPlaceID;
     private String itemNumStar;
@@ -16,7 +18,8 @@ public class ItemList extends HashMap<String, String> {
     public ItemList() {
     }
 
-    public ItemList(String itemName,String itemPlaceID, String address, String itemNumStar,String userTotalRating, String itemDistance, String openNow, String photoReference) {
+    public ItemList(String itemName,String itemPlaceID, String address, String itemNumStar,
+                    String userTotalRating, String itemDistance, String openNow, String photoReference,double lat, double lng) {
         this.itemName = itemName;
         this.itemNumStar = itemNumStar;
         this.itemDistance = itemDistance;
@@ -25,6 +28,24 @@ public class ItemList extends HashMap<String, String> {
         this.photoReference = photoReference;
         this.userTotalRating = userTotalRating;
         this.itemPlaceID = itemPlaceID;
+        this.longtitude = lng;
+        this.latitude = lat;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        this.longtitude = longtitude;
     }
 
     public String getItemName() {

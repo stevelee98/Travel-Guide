@@ -57,8 +57,12 @@ public class Places {
         String rating = "0";
         String userTotalRating = "";
         String openNow = "-NA-";
+        String phone ="";
 
         try {
+            if (!googlePlaceJson.isNull("name")) {
+                placeName = googlePlaceJson.getString("name");
+            }
             if (!googlePlaceJson.isNull("name")) {
                 placeName = googlePlaceJson.getString("name");
             }

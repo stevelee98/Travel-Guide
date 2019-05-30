@@ -1,7 +1,7 @@
 package com.example.hoangviet.mytravelapp;
 
-import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.hoangviet.mytravelapp.Adapter.PlacePhotoAdapter;
+import com.example.hoangviet.mytravelapp.google.PlacePhotoDisplayTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -101,8 +104,12 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
     private ImageView imageView;
 
     private RatingBar placeRatingBar_1;
+    private ImageButton savePlace;
+    private ImageButton direction;
 
     private String placeID;
+    private  double lat;
+    private double lng;
 
     private OnFragmentInteractionListener mListener;
 
@@ -142,6 +149,9 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.place_infor, container, false);
 
+        savePlace = (ImageButton) view.findViewById(R.id.save_place_button);
+        direction = (ImageButton) view.findViewById(R.id.direction_button);
+
         mGeoDataClient = com.google.android.gms.location.places.Places.getGeoDataClient(getActivity());
 
         // Construct a PlaceDetectionClient.
@@ -159,10 +169,10 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
 
         placeRatingBar_1 = (RatingBar) view.findViewById(R.id.place_ratingBar);
 
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
 
         StringBuilder photoRequest = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=");
-        String ptRef = bundle.getString("PHOTO_REFER");
+        final String ptRef = bundle.getString("PHOTO_REFER");
 
         photoRequest.append(ptRef);
         photoRequest.append("&key=" + GOOGLE_API_KEY);
@@ -170,21 +180,26 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
         //load avatar của địa điểm
         Glide.with(this).load(photoRequest.toString()).into(imageView);
 
-        String name = bundle.getString("NAME");
+        final String name = bundle.getString("NAME");
         placeName.setText(name.toString());
 
-        String address = bundle.getString("ADDRESS");
+        final String address = bundle.getString("ADDRESS");
         placeAddress.setText(address.toString());
 
-        String numStar = bundle.getString("RATING");
+        final String numStar = bundle.getString("RATING");
         placeRating.setText(numStar.toString());
 
         placeRatingBar_1.setRating(Float.parseFloat(numStar.toString()));
 
         String totalRating = bundle.getString("TOTAL_RATING");
         placeUserTotalRating.setText(totalRating.toString());
+        final String openNow = bundle.getString("OPEN_NOW");
+
 
         placeID = bundle.getString("PLACE_ID");
+
+        lat = bundle.getDouble("LAT");
+        lng = bundle.getDouble("LNG");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_place_image);
 
@@ -203,15 +218,48 @@ public class PlaceInfor extends Fragment implements OnMapReadyCallback,
         placePhotoUrl.append("&fields=photo");
         placePhotoUrl.append("&key=" + GOOGLE_API_KEY);
 
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+        PlacePhotoDisplayTask placePhotoDisplayTask = new PlacePhotoDisplayTask();
         Object[] toPass = new Object[5];
         toPass[0] = PLACE_PHOTO;
         toPass[1] = placePhotoUrl.toString();
         toPass[2] = recyclerView;
         toPass[3] = placePhotoAdapter;
         toPass[4] = list;
-        googlePlacesReadTask.execute(toPass);
+        placePhotoDisplayTask.execute(toPass);
 
+        savePlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SavePlaceFragment savePlaceFragment = new SavePlaceFragment();
+                Bundle sendBundle = new Bundle();
+
+                sendBundle.putString("NAME", name.toString());
+                sendBundle.putString("RATING",numStar.toString() );
+                sendBundle.putString("PHOTO_REFER", ptRef.toString());
+                if( bundle.getString("OPEN_NOW") != null){
+                    sendBundle.putString("OPEN_NOW", openNow.toString());
+                }
+
+                sendBundle.putString("PLACE_ID",placeID.toString());
+                savePlaceFragment.setArguments(sendBundle);
+                Toast.makeText(getContext(), "save",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        direction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(getContext(), "Direction", Toast.LENGTH_LONG).show();
+//                Uri navigationIntentUri = Uri.parse("geo:0,0?q="+lat+","+lng+"+airport"+")");//creating intent with latlng
+//                Intent mapIntent = new Intent(android.content.Intent.ACTION_VIEW, navigationIntentUri);
+//                startActivity(mapIntent);
+                Uri navigationIntentUri = Uri.parse("google.navigation:q=" + lat +"," + lng);//creating intent with latlng
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, navigationIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
 
         return view;
     }

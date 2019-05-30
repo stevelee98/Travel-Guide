@@ -2,8 +2,6 @@ package com.example.hoangviet.mytravelapp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,13 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.hoangviet.mytravelapp.Models.User;
 import com.example.hoangviet.mytravelapp.services.crud.UserService;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
 
@@ -42,6 +38,7 @@ public class Profife_notLogin_Fragment extends Fragment {
 
     public View view;
     private Button btnProfile;
+    private Button btnEmergencyNumber;
     private OnFragmentInteractionListener mListener;
     private Button btnLanguage;
     private Button btnSignIn;
@@ -89,6 +86,7 @@ public class Profife_notLogin_Fragment extends Fragment {
         btnProfile = (Button) view.findViewById(R.id.btn_profile);
         btnLanguage = view.findViewById(R.id.btn_language);
         btnSignOut = view.findViewById(R.id.btn_sign_out);
+        btnEmergencyNumber = (Button) view.findViewById(R.id.emergency_number);
 
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +106,7 @@ public class Profife_notLogin_Fragment extends Fragment {
                 transaction.commit();
             }
         });
+
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +114,15 @@ public class Profife_notLogin_Fragment extends Fragment {
             }
         });
 
+        btnEmergencyNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = (getActivity()).getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.frame_container,new EmergencyNumberFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
         try {
             progressBar = new ProgressDialog(getContext());
             progressBar.setCancelable(true);

@@ -223,20 +223,44 @@
 </LinearLayout-->
 
     <LinearLayout
+        android:layout_marginBottom="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <TextView
-            android:id="@+id/about_city"
-            android:textSize="18dp"
-            android:textColor="@color/dark"
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            />
+            android:text="@string/about_city_txt"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/cyan_700"/>
+        <com.ms.square.android.expandabletextview.ExpandableTextView
+            android:id="@+id/expand_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:maxCollapsedLines="4"
+            app:animDuration="200">
+            <TextView
+                android:id="@id/expandable_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:text="@string/about_city"
+                android:textColor="@color/dark_gray" />
+            <ImageButton
+                android:id="@id/expand_collapse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_gravity="right|bottom"
+                android:background="@android:color/transparent"/>
+        </com.ms.square.android.expandabletextview.ExpandableTextView>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -252,7 +276,7 @@
             android:layout_margin="3dp"
             android:id="@+id/rv_explore"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="310dp"
             android:clipToPadding="false"
             android:scrollbars="horizontal"
             />
@@ -282,7 +306,7 @@
             android:layout_margin="3dp"
             android:id="@+id/rv_food_and_drink"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="310dp"
             android:clipToPadding="false"
             android:scrollbars="horizontal"
             />
@@ -312,7 +336,7 @@
             android:layout_margin="3dp"
             android:id="@+id/rv_entertainment"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="310dp"
             android:clipToPadding="false"
             android:scrollbars="horizontal"
             />
@@ -342,7 +366,7 @@
             android:layout_margin="3dp"
             android:id="@+id/rv_shopping_mall"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="310dp"
             android:clipToPadding="false"
             android:scrollbars="horizontal"
             />
@@ -372,7 +396,7 @@
             android:layout_margin="3dp"
             android:id="@+id/rv_festival"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="320dp"
             android:clipToPadding="false"
             android:scrollbars="horizontal"
             />

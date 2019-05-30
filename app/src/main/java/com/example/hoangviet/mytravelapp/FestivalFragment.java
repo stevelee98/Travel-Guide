@@ -4,14 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.hoangviet.mytravelapp.Adapter.FestivalAdapter;
+import com.example.hoangviet.mytravelapp.FireBaseRealTimeDataBase.FestivalItem;
+
 import java.util.List;
 
 /**
@@ -78,33 +78,33 @@ public class FestivalFragment extends Fragment {
     }
 
 
-    private void prepareFes() {
-        int[] fes = new int[] {
-                R.drawable.fes_denlong,
-                R.drawable.fes_dentroi,
-                R.drawable.fes_halloween,
-                R.drawable.fes_hoadang,
-                R.drawable.fes_other
-        };
-
-        FestivalItem a = new FestivalItem("Lễ hội đèn lồng", fes[0]);
-        festivalItemList.add(a);
-
-        a = new FestivalItem("Lễ hội hoa đăng", fes[3]);
-        festivalItemList.add(a);
-
-        a = new FestivalItem("Lễ hội halloween", fes[2]);
-        festivalItemList.add(a);
-
-        a = new FestivalItem("Lễ hội đèn trời", fes[1]);
-        festivalItemList.add(a);
-
-        a = new FestivalItem("Lễ hội", fes[4]);
-        festivalItemList.add(a);
-
-
-        festivalAdapter.notifyDataSetChanged();
-    }
+//    private void prepareFes() {
+//        int[] fes = new int[] {
+//                R.drawable.fes_denlong,
+//                R.drawable.fes_dentroi,
+//                R.drawable.fes_halloween,
+//                R.drawable.fes_hoadang,
+//                R.drawable.fes_other
+//        };
+//
+//        FestivalItem a = new FestivalItem("Lễ hội đèn lồng", fes[0]);
+//        festivalItemList.add(a);
+//
+//        a = new FestivalItem("Lễ hội hoa đăng", fes[3]);
+//        festivalItemList.add(a);
+//
+//        a = new FestivalItem("Lễ hội halloween", fes[2]);
+//        festivalItemList.add(a);
+//
+//        a = new FestivalItem("Lễ hội đèn trời", fes[1]);
+//        festivalItemList.add(a);
+//
+//        a = new FestivalItem("Lễ hội", fes[4]);
+//        festivalItemList.add(a);
+//
+//
+//        festivalAdapter.notifyDataSetChanged();
+//    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

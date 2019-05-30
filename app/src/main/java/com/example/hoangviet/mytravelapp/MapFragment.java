@@ -30,6 +30,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hoangviet.mytravelapp.Adapter.CustomItemAdapter;
+import com.example.hoangviet.mytravelapp.ItemsList.ItemList;
+import com.example.hoangviet.mytravelapp.google.PlacesDisplayTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -89,7 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
     String[] mPlaceTypeName = null;
 
     private RecyclerView recyclerView;
-    private CustomItemAdapter CustomItemAdapter;
+    private com.example.hoangviet.mytravelapp.Adapter.CustomItemAdapter CustomItemAdapter;
     private List<ItemList> list;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -236,6 +239,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                 bundle1.putString("TOTAL_RATING", list.get(position).getUserTotalRating().toString());
                 bundle1.putString("PLACE_ID", list.get(position).getItemPlaceID().toString());
 
+                bundle1.putDouble("LAT", list.get(position).getLatitude());
+                bundle1.putDouble("LNG", list.get(position).getLongtitude());
+
+                if (list.get(position).getopenNow().toString() != null) {
+                    bundle1.putString("OPEN_NOW", list.get(position).getopenNow().toString());
+                }
+
                 placeInfor.setArguments(bundle1);
 
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -347,7 +357,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         googlePlacesUrl.append("&sensor=true");
                         googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
 
-                        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+                        PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask(getContext());
                         Object[] toPass = new Object[6];
 
                         toPass[0] = NEARBY_SEARCH;
@@ -356,7 +366,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                         toPass[3] = recyclerView;
                         toPass[4] = CustomItemAdapter;
                         toPass[5] = list;
-                        googlePlacesReadTask.execute(toPass);
+                        placesDisplayTask.execute(toPass);
 
                     }
                     else {
@@ -548,12 +558,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
                                     }
                                 }
 
-                                // Release the place likelihood buffer, to avoid memory leaks.
                                 likelyPlaces.release();
-
-                                // Show a dialog offering the user the list of likely places, and add a
-                                // marker at the selected place.
-                                //openPlacesDialog();
 
                             } else {
                                 Log.e(TAG, "Exception: %s", task.getException());
@@ -574,39 +579,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
             getLocationPermission();
         }
     }
-//    private void openPlacesDialog() {
-//        // Ask the user to choose the place where they are now.
-//        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // The "which" argument contains the position of the selected item.
-//                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
-//                String markerSnippet = mLikelyPlaceAddresses[which];
-//                if (mLikelyPlaceAttributions[which] != null) {
-//                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
-//                }
-//
-//                // Add a marker for the selected place, with an info window
-//                // showing information about that place.
-//                mMap.addMarker(new MarkerOptions()
-//                        .title(mLikelyPlaceNames[which])
-//                        .position(markerLatLng)
-//                        .snippet(markerSnippet));
-//
-//                // Position the map's camera at the location of the marker.
-//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-//                        DEFAULT_ZOOM));
-//            }
-//        };
-//
-//        // Display the dialog.
-//        AlertDialog dialog = new AlertDialog.Builder(getContext().getApplicationContext())
-//                .setTitle(R.string.pick_place)
-//                .setItems(mLikelyPlaceNames, listener)
-//                .show();
-//    }
-
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -628,48 +600,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-
-//    private void CurentLocation(){
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//        Criteria criteria = new Criteria();
-//
-//        Location lastLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-//        if (lastLocation != null)
-//        {
-//            LatLng latLng=new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-//            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-//
-//            CameraPosition cameraPosition = new CameraPosition.Builder()
-//                    .target(latLng)      // Sets the center of the map to location user
-//                    .zoom(15)                   // Sets the zoom
-//                    .bearing(90)                // Sets the orientation of the camera to east
-//                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-//                    .build();                   // Creates a CameraPosition from the builder
-//            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-////Thêm MarketOption cho Map:
-//            MarkerOptions option=new MarkerOptions();
-//            option.title("Chỗ Tui đang ngồi đó");
-//            option.snippet("Gần làng SOS");
-//            option.position(latLng);
-//            Marker currentMarker= map.addMarker(option);
-//            currentMarker.showInfoWindow();
-//        }
-//    }
-//
-//    private Object getSystemService(String locationService) {
-//    }
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

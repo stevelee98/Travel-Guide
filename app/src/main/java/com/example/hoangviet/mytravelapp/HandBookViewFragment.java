@@ -4,25 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.webkit.WebView;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EmergencyFragment.OnFragmentInteractionListener} interface
+ * {@link HandBookViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EmergencyFragment#newInstance} factory method to
+ * Use the {@link HandBookViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EmergencyFragment extends Fragment {
+public class HandBookViewFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,14 +28,12 @@ public class EmergencyFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public View view;
-    private RecyclerView recyclerView;
-    private CustomItemAdapter emergencyAdapter;
-    private List<ItemList> itemList;
+    WebView webView;
+    View view;
 
     private OnFragmentInteractionListener mListener;
 
-    public EmergencyFragment() {
+    public HandBookViewFragment() {
         // Required empty public constructor
     }
 
@@ -49,11 +43,11 @@ public class EmergencyFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EmergencyFragment.
+     * @return A new instance of fragment HandBookViewFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EmergencyFragment newInstance(String param1, String param2) {
-        EmergencyFragment fragment = new EmergencyFragment();
+    public static HandBookViewFragment newInstance(String param1, String param2) {
+        HandBookViewFragment fragment = new HandBookViewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -74,64 +68,16 @@ public class EmergencyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //view = inflater.inflate(R.layout.fragment_emergency, container, false);
+        view = (View) inflater.inflate(R.layout.fragment_hand_book_view, container, false);
+        webView = (WebView) view.findViewById(R.id.web_view);
 
-//        recyclerView = (RecyclerView) view.findViewById(R.id.rv_emergency);
-//
-//        itemList = new ArrayList<>();
-//        emergencyAdapter = new EmergencyAdapter(getActivity(),itemList);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(emergencyAdapter);
-//        prepareEm();
+        Bundle bundle = getArguments();
+
+        String link = bundle.getString("LINK");
+        webView.loadUrl(link);
         return view;
     }
 
-//    private void prepareEm() {
-//        ItemList a = new ItemList("police","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        a = new ItemList("công an quận 7","4.2","4.2","1.3 Km");
-//        itemList.add(a);
-//
-//        emergencyAdapter.notifyDataSetChanged();
-//    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -167,8 +113,6 @@ public class EmergencyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onClick(View v);
-
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }

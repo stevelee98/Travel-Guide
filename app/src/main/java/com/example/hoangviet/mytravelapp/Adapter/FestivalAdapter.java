@@ -1,4 +1,4 @@
-package com.example.hoangviet.mytravelapp;
+package com.example.hoangviet.mytravelapp.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,12 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.hoangviet.mytravelapp.FireBaseRealTimeDataBase.FestivalItem;
+import com.example.hoangviet.mytravelapp.R;
 
 import java.util.List;
 
 public class FestivalAdapter extends RecyclerView.Adapter<FestivalAdapter.MyViewHolder> {
     private Context context;
     private List<FestivalItem> festivalItemList;
+    private static OnItemClickListener mOnClickItem;
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener mOnClickItem) {
+        this.mOnClickItem = mOnClickItem;
+    }
 
     public FestivalAdapter(Context context, List<FestivalItem> itemList){
         this.context = context;
@@ -32,8 +43,9 @@ public class FestivalAdapter extends RecyclerView.Adapter<FestivalAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         FestivalItem item = festivalItemList.get(i);
         myViewHolder.Name.setText(item.getName());
+        myViewHolder.day.setText(item.getDay());
 
-        Glide.with(context).load(item.getImgView()).into(myViewHolder.imageView);
+        Glide.with(context).load(item.getImgList().get(1).toString()).into(myViewHolder.avatar);
 
     }
 
@@ -44,13 +56,23 @@ public class FestivalAdapter extends RecyclerView.Adapter<FestivalAdapter.MyView
 
     public class MyViewHolder extends  RecyclerView.ViewHolder {
         public TextView Name;
-        public ImageView imageView;
+        public ImageView avatar;
+        public TextView day;
 
-        public MyViewHolder(View view){
+        public MyViewHolder(final View view){
             super(view);
 
             Name = (TextView) view.findViewById(R.id.fes_name);
-            imageView = (ImageView) view.findViewById(R.id.fes_thumbnail);
+            avatar = (ImageView) view.findViewById(R.id.fes_thumbnail);
+            day = (TextView) view.findViewById(R.id.day_fes);
+            view.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(mOnClickItem != null){
+                        mOnClickItem.onItemClick(view, getLayoutPosition());
+                    }
+                }
+            });
         }
     }
 }

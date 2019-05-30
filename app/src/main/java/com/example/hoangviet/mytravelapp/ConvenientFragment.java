@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
@@ -31,9 +30,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,6 +79,7 @@ public class ConvenientFragment extends Fragment implements MapFragment.OnFragme
     private CardView cvParking;
     private CardView cvCarRepair;
     private CardView cvFoodDrink;
+    private CardView cvExplore;
 
     double latitude = 0;
     double longitude = 0;
@@ -174,10 +172,10 @@ public class ConvenientFragment extends Fragment implements MapFragment.OnFragme
                         latitude = mLastKnownLocation.getLatitude();
                         longitude = mLastKnownLocation.getLongitude();
 
-                        Geocoder geocoder = new Geocoder(getContext().getApplicationContext());
+                        Geocoder geocoder = new Geocoder(Objects.requireNonNull(getContext()).getApplicationContext());
                         List<Address> list = new ArrayList<>();
                         try {
-                            list = geocoder.getFromLocation(latitude, longitude, 2);
+                            list = geocoder.getFromLocation(latitude, longitude, 1);
                         } catch (IOException e) {
                             Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
                         }
@@ -214,6 +212,7 @@ public class ConvenientFragment extends Fragment implements MapFragment.OnFragme
         cvGasStation = (CardView) view.findViewById(R.id.cv_gas_station);
         cvParking = (CardView) view.findViewById(R.id.cv_parking);
         cvFoodDrink = (CardView) view.findViewById(R.id.cv_food_drink);
+        cvExplore = (CardView) view.findViewById(R.id.cv_explore);
 
 
         //tìm đồn cảnh sát
@@ -310,6 +309,17 @@ public class ConvenientFragment extends Fragment implements MapFragment.OnFragme
             @Override
             public void onClick(View v) {
                 loadMap("restaurant");
+            }
+        });
+
+        cvExplore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExploreFragment exploreFragment = new ExploreFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container,exploreFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 

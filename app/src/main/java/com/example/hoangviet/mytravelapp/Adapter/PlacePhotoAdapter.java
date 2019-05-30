@@ -1,4 +1,4 @@
-package com.example.hoangviet.mytravelapp;
+package com.example.hoangviet.mytravelapp.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.hoangviet.mytravelapp.PlacePhotoItem;
+import com.example.hoangviet.mytravelapp.R;
 
 import java.util.List;
 

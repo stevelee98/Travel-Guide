@@ -9,41 +9,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 
 import com.example.hoangviet.mytravelapp.Models.User;
 import com.example.hoangviet.mytravelapp.UI.Dialog.SimpleMessage;
 import com.example.hoangviet.mytravelapp.auth.FirebaseAuthentication;
-import com.example.hoangviet.mytravelapp.helper.BottomNavigationBehavior;
 import com.example.hoangviet.mytravelapp.services.crud.UserService;
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 import java.util.Locale;
 
@@ -55,7 +40,12 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
         MapFragment.OnFragmentInteractionListener,
         SearchView.OnQueryTextListener,
         SelectLanguageDialog.OnFragmentInteractionListener,
-        PlaceInfor.OnFragmentInteractionListener{
+        PlaceInfor.OnFragmentInteractionListener,
+        FestivalInfor.OnFragmentInteractionListener,
+        SavePlaceFragment.OnFragmentInteractionListener,
+        ExploreFragment.OnFragmentInteractionListener,
+        HandBookViewFragment.OnFragmentInteractionListener,
+        EmergencyNumberFragment.OnFragmentInteractionListener{
 
 
 
@@ -261,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                     loadFragment(R.id.frame_container, fragment);
                     return true;
                 case R.id.navigation_place:
-                    fragment = new MapFragment();
+                    fragment = new SavePlaceFragment();
                     loadFragment(R.id.frame_container, fragment);
                     return true;
                 case R.id.navigation_user:

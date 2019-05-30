@@ -1,9 +1,11 @@
 package com.example.hoangviet.mytravelapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hoangviet.mytravelapp.Adapter.FestivalAdapter;
 import com.example.hoangviet.mytravelapp.Adapter.HomeItemAdapter;
 import com.example.hoangviet.mytravelapp.FireBaseRealTimeDataBase.Explore_Place;
+import com.example.hoangviet.mytravelapp.FireBaseRealTimeDataBase.FestivalItem;
 import com.example.hoangviet.mytravelapp.ItemsList.HomeItemList;
+import com.example.hoangviet.mytravelapp.google.PlacesDisplayTask;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,30 +58,31 @@ public class HomeFragment extends Fragment {
     private static final String GOOGLE_API_KEY = "AIzaSyC3OjUhJ2nBCSmOfVz4kIcWAuwI_kaxgF8";
 
     private ExpandableTextView cityInfor;
-    private RecyclerView rvExplore;
-    private RecyclerView rvFoodDrink;
-    private RecyclerView rvEntertainment;
-    private RecyclerView rvFestival;
-    private RecyclerView rvShoppingMall;
+    public RecyclerView rvExplore;
+    public RecyclerView rvFoodDrink;
+    public RecyclerView rvEntertainment;
+    public RecyclerView rvShoppingMall;
+    public RecyclerView rvFestival;
 
-    private HomeItemAdapter festivalAdapter;
-    private HomeItemAdapter exploreAdapter;
-    private HomeItemAdapter food_drinkAdapter;
-    private HomeItemAdapter entertaimentAdapter;
-    private HomeItemAdapter shoppingMallApdapter;
+    private FestivalAdapter festivalAdapter;
+    public HomeItemAdapter exploreAdapter;
+    public HomeItemAdapter food_drinkAdapter;
+    public HomeItemAdapter entertaimentAdapter;
+    public HomeItemAdapter shoppingMallApdapter;
 
-    private List<HomeItemList> festivalList;
-    private List<HomeItemList> exploreList;
-    private List<HomeItemList> food_drinkList;
-    private List<HomeItemList> entertaimentList;
-    private List<HomeItemList> shoppingMallList;
+    public List<FestivalItem> festivalList;
+    public List<HomeItemList> exploreList;
+    public List<HomeItemList> food_drinkList;
+    public List<HomeItemList> entertaimentList;
+    public List<HomeItemList> shoppingMallList;
 
-    private List<String> listTest;
-    private ArrayAdapter arrayAdapter;
+    public List<String> listTest;
+    public ArrayAdapter arrayAdapter;
 
     private ImageView imageView;
 
     public View view;
+    AlertDialog dialog;
 
     public TextView test;
     public int i = 0;
@@ -122,61 +128,99 @@ public class HomeFragment extends Fragment {
         view = (View) inflater.inflate(R.layout.fragment_home, container, false);
         imageView = (ImageView) view.findViewById(R.id.avatar);
 
-//        Glide.with(getContext())
-//                .load("http://vietnam-business-consulting.com/wp-content/uploads/2018/09/Saigon-in-the-morning.jpg")
-//                .into(imageView);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mData = firebaseDatabase.getReference();
 
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity)Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
         Objects.requireNonNull(((AppCompatActivity) (getActivity())).getSupportActionBar()).setTitle("Sài Gòn travel");
-//        textView = (TextView) toolbar.findViewById(R.id.txt_cityname);
-//        textView.setText("Home");
 
-//        cityInfor = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
-//        cityInfor.setText(longtext);
+        cityInfor = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
+        cityInfor.setText(getResources().getString(R.string.about_city));
 
         rvExplore = (RecyclerView) view.findViewById(R.id.rv_explore);
         rvFoodDrink = (RecyclerView) view.findViewById(R.id.rv_food_and_drink);
         rvEntertainment = (RecyclerView) view.findViewById(R.id.rv_entertainment);
-        rvFestival = (RecyclerView) view.findViewById(R.id.rv_festival);
         rvShoppingMall = (RecyclerView) view.findViewById(R.id.rv_shopping_mall);
+        rvFestival = (RecyclerView) view.findViewById(R.id.rv_festival);
 
 
         festivalList = new ArrayList<>();
         exploreList = new ArrayList<>();
         entertaimentList = new ArrayList<>();
-        food_drinkList = new ArrayList<>();
         shoppingMallList = new ArrayList<>();
+        food_drinkList = new ArrayList<>();
 
 
-        exploreAdapter = new HomeItemAdapter(getActivity(), exploreList);
-        food_drinkAdapter = new HomeItemAdapter(getActivity(), food_drinkList);
-        entertaimentAdapter = new HomeItemAdapter(getActivity(), entertaimentList);
-        festivalAdapter = new HomeItemAdapter(getActivity(), festivalList);
-        shoppingMallApdapter = new HomeItemAdapter(getActivity(), shoppingMallList);
+        food_drinkAdapter = new HomeItemAdapter(getContext(), food_drinkList);
+        food_drinkAdapter.setOnItemClickListener(new HomeItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position, List<HomeItemList> list) {
+                Bundle bundle1 = new Bundle();
+                PlaceInfor placeInfor = new PlaceInfor();
+                bundle1.putDouble("LAT", list.get(position).getLatitude());
+                bundle1.putDouble("LNG", list.get(position).getLongtitude());
+                bundle1.putString("NAME", list.get(position).getItemName().toString());
+                bundle1.putString("RATING", list.get(position).getItemNumStar().toString());
+                bundle1.putString("ADDRESS", list.get(position).getAddress().toString());
+                bundle1.putString("PHOTO_REFER", list.get(position).getPhotoReference().toString());
+                bundle1.putString("TOTAL_RATING", list.get(position).getUserTotalRating().toString());
+                bundle1.putString("PLACE_ID", list.get(position).getItemPlaceID().toString());
 
-        RecyclerView.LayoutManager layoutManagerExplore = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rvExplore.setLayoutManager(layoutManagerExplore);
-        rvExplore.setAdapter(exploreAdapter);
+                placeInfor.setArguments(bundle1);
 
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container, placeInfor);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
         RecyclerView.LayoutManager layoutManagerFoodDrink = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvFoodDrink.setLayoutManager(layoutManagerFoodDrink);
         rvFoodDrink.setAdapter(food_drinkAdapter);
 
-        RecyclerView.LayoutManager layoutManagerEnter = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rvEntertainment.setLayoutManager(layoutManagerEnter);
+
+        entertaimentAdapter = new HomeItemAdapter(getContext(), entertaimentList);
+        RecyclerView.LayoutManager layoutManagerEn = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rvEntertainment.setLayoutManager(layoutManagerEn);
         rvEntertainment.setAdapter(entertaimentAdapter);
 
-        RecyclerView.LayoutManager layoutManagerFes = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rvFestival.setLayoutManager(layoutManagerFes);
-        rvFestival.setAdapter(festivalAdapter);
 
+        shoppingMallApdapter = new HomeItemAdapter(getActivity(), shoppingMallList);
         RecyclerView.LayoutManager layoutManagerShop = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvShoppingMall.setLayoutManager(layoutManagerShop);
         rvShoppingMall.setAdapter(shoppingMallApdapter);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mData = firebaseDatabase.getReference();
+
+        festivalAdapter = new FestivalAdapter(getActivity(), festivalList);
+        festivalAdapter.setOnItemClickListener(new FestivalAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Bundle bundle1 = new Bundle();
+                FestivalInfor festivalInfor = new FestivalInfor();
+
+                bundle1.putString("NAME", festivalList.get(position).getName().toString());
+                bundle1.putString("DAY", festivalList.get(position).getDay().toString());
+                bundle1.putString("DESCIPTION", festivalList.get(position).getDescription().toString());
+                bundle1.putString("IMG_SIZE", Integer.toString(festivalList.get(position).getImgList().size()));
+
+                for (int i = 0; i < festivalList.get(position).getImgList().size(); i++) {
+                    StringBuilder Type = new StringBuilder("IMG");
+                    Type.append(Integer.toString(i));
+                    bundle1.putString(Type.toString(), festivalList.get(position).getImgList().get(i).toString());
+                }
+                festivalInfor.setArguments(bundle1);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_container, festivalInfor);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        RecyclerView.LayoutManager layoutManagerFes = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rvFestival.setLayoutManager(layoutManagerFes);
+        rvFestival.setAdapter(festivalAdapter);
 
 
         mData.child("hochiminh_city").child("explore_place").addValueEventListener(new ValueEventListener() {
@@ -185,27 +229,26 @@ public class HomeFragment extends Fragment {
                 String name;
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
 
-                        Explore_Place explore_place = postSnapshot.getValue(Explore_Place.class);
-                        StringBuilder textSearchURL =
-                                new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=");
-                        textSearchURL.append(explore_place.getName().toString());
-                        textSearchURL.append("&inputtype=textquery&fields=" +
-                                "place_id,photos,formatted_address,name,rating,user_ratings_total,opening_hours,geometry&key=");
-                        textSearchURL.append(GOOGLE_API_KEY);
+                    Explore_Place explore_place = postSnapshot.getValue(Explore_Place.class);
+                    StringBuilder textSearchURL =
+                            new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=");
+                    textSearchURL.append(explore_place.getName().toString());
+                    textSearchURL.append("&inputtype=textquery&fields=" +
+                            "place_id,photos,formatted_address,name,rating,user_ratings_total,opening_hours,geometry&key=");
+                    textSearchURL.append(GOOGLE_API_KEY);
 
-                        //test.setText(textSearchURL.toString());
+                    //test.setText(textSearchURL.toString());
 
-                        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-                        Object[] toPass = new Object[6];
+                    PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask(getContext());
+                    Object[] toPass = new Object[6];
 
-                        toPass[0] = 0;
-                        toPass[1] = null;
-                        toPass[2] = textSearchURL.toString();
-                        toPass[3] = rvExplore;
-                        toPass[4] = exploreAdapter;
-                        toPass[5] = exploreList;
-                        googlePlacesReadTask.execute(toPass);
-
+                    toPass[0] = 0;
+                    toPass[1] = null;
+                    toPass[2] = textSearchURL.toString();
+                    toPass[3] = rvExplore;
+                    toPass[4] = exploreAdapter;
+                    toPass[5] = exploreList;
+                    placesDisplayTask.execute(toPass);
 
                 }
             }
@@ -216,61 +259,46 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        load(food_drinkList,rvFoodDrink,food_drinkAdapter, "restaurant");
-        load(entertaimentList,rvEntertainment,entertaimentAdapter, "bar");
-        load(shoppingMallList,rvShoppingMall,shoppingMallApdapter, "shopping_mall");
+
+        load(food_drinkList, rvFoodDrink, food_drinkAdapter, "restaurant");
+        load(entertaimentList, rvEntertainment, entertaimentAdapter, "bar");
+        load(shoppingMallList, rvShoppingMall, shoppingMallApdapter, "shopping_mall");
+
+
+        exploreAdapter = new HomeItemAdapter(getActivity(), exploreList);
+        RecyclerView.LayoutManager layoutManagerEx = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rvExplore.setLayoutManager(layoutManagerEx);
+        rvExplore.setAdapter(exploreAdapter);
+        mData.child("hochiminh_city").child("festival").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String name;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                    FestivalItem festivalItem = postSnapshot.getValue(FestivalItem.class);
+
+                    List<String> photoList = new ArrayList<>();
+                    photoList = (ArrayList<String>) postSnapshot.child("photos").getValue();
+
+                    festivalItem.setImgList(photoList);
+
+                    festivalList.add(festivalItem);
+                    festivalAdapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         return view;
     }
 
-
-
-    private void loadFoodDrinkList() {
-        StringBuilder googlePlacesUrl =
-                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-
-        googlePlacesUrl.append("type=restaurant");
-        //googlePlacesUrl.append("&keyword=ăn+uống");
-        googlePlacesUrl.append("&location=10.773130,106.697942");
-        googlePlacesUrl.append("&radius=" + 6000);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
-
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-        Object[] toPass = new Object[6];
-        toPass[0] = 0;
-        toPass[1] = null;
-        toPass[2] = googlePlacesUrl.toString();
-        toPass[3] = rvFoodDrink;
-        toPass[4] = food_drinkAdapter;
-        toPass[5] = food_drinkList;
-
-        googlePlacesReadTask.execute(toPass);
-
-    }
-    private void loadEntertainmentList() {
-        StringBuilder googlePlacesUrl =
-                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-
-        googlePlacesUrl.append("type=bar");
-        //googlePlacesUrl.append("&keyword=ăn+uống");
-        googlePlacesUrl.append("&location=10.773130,106.697942");
-        googlePlacesUrl.append("&radius=" + 6000);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
-
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-        Object[] toPass = new Object[6];
-        toPass[0] = 0;
-        toPass[1] = null;
-        toPass[2] = googlePlacesUrl.toString();
-        toPass[3] = rvEntertainment;
-        toPass[4] = entertaimentAdapter;
-        toPass[5] = entertaimentList;
-
-        googlePlacesReadTask.execute(toPass);
-
-    }
-    private void load(List<HomeItemList> list,RecyclerView rv, HomeItemAdapter homeItemAdapter, String type) {
+    private void load(List<HomeItemList> list, RecyclerView rv, HomeItemAdapter homeItemAdapter, String type) {
         StringBuilder googlePlacesUrl =
                 new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
 
@@ -280,7 +308,7 @@ public class HomeFragment extends Fragment {
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
 
-        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+        PlacesDisplayTask placesDisplayTask = new PlacesDisplayTask(getContext());
         Object[] toPass = new Object[6];
         toPass[0] = 0;
         toPass[1] = null;
@@ -289,9 +317,10 @@ public class HomeFragment extends Fragment {
         toPass[4] = homeItemAdapter;
         toPass[5] = list;
 
-        googlePlacesReadTask.execute(toPass);
+        placesDisplayTask.execute(toPass);
 
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -316,16 +345,6 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
